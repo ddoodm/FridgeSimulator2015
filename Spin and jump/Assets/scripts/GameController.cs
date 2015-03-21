@@ -4,8 +4,8 @@ using System.Collections;
 public class GameController : MonoBehaviour
 {
 	public GUIText restartText;
-	public GUIText gameOverText;
-	public GUIText scoreText;
+	public ShadowText gameOverText;
+    public ShadowText scoreText;
 
     /// <summary>
     /// The main player controller.
@@ -17,15 +17,13 @@ public class GameController : MonoBehaviour
     /// </summary>
     public float scoreDelta = 0.25f;
 
-	private bool gameOver;
-	private float score;
+	private bool gameOver = false;
+	private float score = 0;
 
 	void Start()
 	{
-		gameOver = false;
 		restartText.text = "";
 		gameOverText.text = "";
-		score = 0;
 		updateScore ();
 	}
 
@@ -37,9 +35,9 @@ public class GameController : MonoBehaviour
 
 	public void GameOver()
 	{
-		gameOverText.text = "Game Over!";
+		gameOverText.text = "GAME OVER";
 		gameOver = true;
-		restartText.text = "Press R to restart";
+		restartText.text = "Press R to Restart";
 	}
 
     public bool isGameOver
@@ -50,7 +48,7 @@ public class GameController : MonoBehaviour
 	void updateScore()
 	{
         // Show the score as a whole integer
-		scoreText.text = string.Format("Score: {0}", Mathf.Floor(score));
+		scoreText.text = string.Format("{0}", Mathf.Floor(score));
 	}
 
 	void Update()
