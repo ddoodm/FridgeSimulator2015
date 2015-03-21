@@ -27,10 +27,18 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public bool isInAir { get; protected set; }
 
+    private GameController gameController;
+
+    void Start()
+    {
+        gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
+    }
+
 	void FixedUpdate()
 	{
         // Parallel transform along the path (infinite force).
-        rigidbody.position += pathDirection * moveSpeed;
+        if(!gameController.isGameOver)
+            rigidbody.position += pathDirection * moveSpeed;
 
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
@@ -42,9 +50,14 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        // TODO: Check whether any of the contact points' normals are upward-facing
-        // before setting the 'isInAir' flag.
-        isInAir = false;
+        // Obtain distance from contact normal to ideal ground normal
+        ContactPoint pContact = other.contacts[0];
+        Vector3 contactNorm = pContact.normal;
+        float angleDelta = Vector3.Distance(contactNorm, Vector3.up);
+
+        // If the contact normal is (almost) up (flat surface), we are on the ground
+        if (angleDelta < 0.25f)
+            isInAir = false;
     }
 
     void OnCollisionExit(Collision other)

@@ -42,6 +42,11 @@ public class GameController : MonoBehaviour
 		restartText.text = "Press R to restart";
 	}
 
+    public bool isGameOver
+    {
+        get { return gameOver; }
+    }
+
 	void updateScore()
 	{
         // Show the score as a whole integer
