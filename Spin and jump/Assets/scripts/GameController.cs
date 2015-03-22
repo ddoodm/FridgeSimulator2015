@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameController : MonoBehaviour
 {
-	public GUIText restartText;
+	public ShadowText restartText;
 	public ShadowText gameOverText;
     public ShadowText scoreText;
 

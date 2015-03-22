@@ -25,9 +25,13 @@ public class PlayerController : MonoBehaviour
 		slowedSpeed = 0.25f;
 
     /// <summary>
+    /// The Y value at which the player will be killed (game-over).
+    /// </summary>
+    public float deathHeight = -1.0f;
+
+    /// <summary>
     /// Flag used to constrain jumping to when the player is intersecting the floor.
     /// </summary>
-	/// 
     public bool isInAir { get; protected set; }
 	/// <summary>
 	/// Flag used to slow player before rotating platform.
@@ -41,6 +45,12 @@ public class PlayerController : MonoBehaviour
     {
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
 		isSlowed = false;
+    }
+
+    void Update()
+    {
+        if (transform.position.y <= deathHeight)
+            gameController.GameOver();
     }
 
 	void FixedUpdate()
