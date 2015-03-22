@@ -1,13 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\endGame.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerController.cs">
     <Files>
-      <File FileName="Assets\scripts\PlayerController.cs" Line="12" Column="3" />
-      <File FileName="..\..\..\..\Quiz Code\fake flappy\Mover.cs" Line="1" Column="1" />
-      <File FileName="Assets\mover.cs" Line="1" Column="1" />
-      <File FileName="..\..\..\..\Quiz Code\fake flappy\GameController.cs" Line="18" Column="2" />
-      <File FileName="Assets\endGame.cs" Line="21" Column="31" />
-      <File FileName="..\..\..\..\Quiz Code\fake flappy\Scoring.cs" Line="19" Column="2" />
+      <File FileName="Assets\Scripts\SlowPlayer.cs" Line="7" Column="4" />
+      <File FileName="Assets\Scripts\PlayerController.cs" Line="36" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

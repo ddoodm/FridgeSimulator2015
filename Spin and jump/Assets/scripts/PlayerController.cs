@@ -20,25 +20,37 @@ public class PlayerController : MonoBehaviour
     /// The amount of parallel transfer per frame.
     /// (Temp.)
     /// </summary>
-    public float moveSpeed = 0.1f;
+    public float 
+		moveSpeed = 0.1f, 
+		slowedSpeed = 0.25f;
 
     /// <summary>
     /// Flag used to constrain jumping to when the player is intersecting the floor.
     /// </summary>
+	/// 
     public bool isInAir { get; protected set; }
+	/// <summary>
+	/// Flag used to slow player before rotating platform.
+	/// </summary>
+	public bool isSlowed { get; protected set; }
+
 
     private GameController gameController;
 
     void Start()
     {
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
+		isSlowed = false;
     }
 
 	void FixedUpdate()
 	{
         // Parallel transform along the path (infinite force).
-        if(!gameController.isGameOver)
+        if(!gameController.isGameOver && !isSlowed)
             rigidbody.position += pathDirection * moveSpeed;
+		else
+			rigidbody.position += pathDirection * slowedSpeed;
+
 
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
@@ -64,4 +76,28 @@ public class PlayerController : MonoBehaviour
     {
         isInAir = true;
     }
+
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.tag == "StaticRotatorPlatform") {
+			isSlowed = true;
+			
+		}
+
+		if (other.tag == "RotatingRotatorTrigger" && isSlowed) 
+		{
+			//do stuff here
+		}
+
+	}
+
+
+	void onTriggerExit(Collider other) 
+	{
+		if (other.tag == "StaticRotatorTrigger") 
+			isSlowed = false;
+	}
+
+
 }
