@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
             gameController.GameOver();
     }
 
-	void FixedUpdate()
+	void LateUpdate()
 	{
         // Parallel transform along the path (infinite force).
         if(!gameController.isGameOver && !isSlowed)
