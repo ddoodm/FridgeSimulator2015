@@ -42,11 +42,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
-		isSlowed = false;
     }
 
     void Update()
     {
+        // Check for player intersection with the "death plane".
         if (transform.position.y <= deathHeight)
             gameController.GameOver();
     }
@@ -64,7 +64,10 @@ public class PlayerController : MonoBehaviour
 
         // Add jump force
         if (Input.GetButton("Jump") && !isInAir)
+        {
             rigidbody.AddForce(jumpForce);
+            isInAir = true;
+        }
 	}
 
     void OnCollisionEnter(Collision other)
@@ -77,10 +80,5 @@ public class PlayerController : MonoBehaviour
         // If the contact normal is (almost) up (flat surface), we are on the ground
         if (angleDelta < 0.25f)
             isInAir = false;
-    }
-
-    void OnCollisionExit(Collision other)
-    {
-        isInAir = true;
     }
 }
