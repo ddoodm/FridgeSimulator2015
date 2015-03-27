@@ -1,0 +1,12 @@
+N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\Assembly-CSharp.dll
+N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\Assembly-CSharp.pdb
+N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\UnityEditor.dll
+N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\UnityEngine.dll
+N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\UnityEngine.UI.dll
+N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\Mono.Cecil.dll
+N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\nunit.framework.dll
+N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\Unity.DataContract.dll
+N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+N:\GameStudioOne\GameStudioOne\Spin and jump\obj\Debug\Assembly-CSharp-vs.csprojResolveAssemblyReference.cache
+N:\GameStudioOne\GameStudioOne\Spin and jump\obj\Debug\Assembly-CSharp.dll
+N:\GameStudioOne\GameStudioOne\Spin and jump\obj\Debug\Assembly-CSharp.pdb

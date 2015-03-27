@@ -5,6 +5,7 @@ public class CameraController : MonoBehaviour
 {
 	public GameObject player;
 	private Vector3 offset;
+    private Vector3 offsetRot;
 
     private GameController gameController;
 
@@ -14,6 +15,7 @@ public class CameraController : MonoBehaviour
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
 
 		offset = transform.position;
+        offsetRot = transform.rotation.eulerAngles;
 	}
 	
 	// Update is called once per frame
@@ -23,8 +25,16 @@ public class CameraController : MonoBehaviour
         if (gameController.isGameOver)
             return;
 
-        // Lock transformation in the Y axis
+        transform.rotation = Quaternion.identity;
+
+        transform.position = player.transform.position;
+        transform.RotateAround(player.transform.position, player.transform.up, player.transform.rotation.eulerAngles.y);
+        transform.Translate(offset);
+
+        transform.Rotate(offsetRot);
+
+        // Lock Y transformation
         Vector3 yLock = new Vector3(1.0f, 0.0f, 1.0f);
-		transform.position = Vector3.Scale(player.transform.position, yLock) + offset;
+        transform.position = Vector3.Scale(transform.position, yLock) + Vector3.Scale(offset, Vector3.up);
 	}
 }

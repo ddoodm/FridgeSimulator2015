@@ -33,7 +33,13 @@ public class PlayerTurner : MonoBehaviour
     /// </summary>
     public AnimationCurve turnSpeed;
 
+    private PlayerController playerController;
     private RotateState rotateState = new RotateState();
+
+    void Start()
+    {
+        playerController = GetComponent<PlayerController>();
+    }
 
     void LateUpdate()
     {
@@ -73,6 +79,10 @@ public class PlayerTurner : MonoBehaviour
     {
         // Do not get a request if we're still turning
         if (rotateState.direction != Direction.NONE)
+            return;
+
+        // Do not turn while in the air
+        if (playerController.isInAir)
             return;
 
         if (Input.GetKey(KeyCode.D))
