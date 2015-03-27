@@ -10,23 +10,12 @@ public class PlayerController : MonoBehaviour
 	public float gravityForce   = 15.0f;
 
     /// <summary>
-    /// The direction of parallel transfer per frame.
-    /// (Temp.)
-    /// </summary>
-    public Vector3 pathDirection = Vector3.forward;
-
-    /// <summary>
     /// The amount of parallel transfer per frame.
     /// (Temp.)
     /// </summary>
     public float 
 		moveSpeed = 0.1f, 
 		slowedSpeed = 0.25f;
-
-    /// <summary>
-    /// The Y value at which the player will be killed (game-over).
-    /// </summary>
-    public float deathHeight = -1.0f;
 
     /// <summary>
     /// Flag used to constrain jumping to when the player is intersecting the floor.
@@ -44,20 +33,13 @@ public class PlayerController : MonoBehaviour
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
     }
 
-    void Update()
-    {
-        // Check for player intersection with the "death plane".
-        if (transform.position.y <= deathHeight)
-            gameController.GameOver();
-    }
-
 	void LateUpdate()
 	{
         // Parallel transform along the path (infinite force).
         if(!gameController.isGameOver && !isSlowed)
-            rigidbody.position += pathDirection * moveSpeed;
+            rigidbody.position += transform.forward * moveSpeed;
 		else
-			rigidbody.position += pathDirection * slowedSpeed;
+            rigidbody.position += transform.forward * slowedSpeed;
 
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
@@ -65,7 +47,8 @@ public class PlayerController : MonoBehaviour
         // Add jump force
         if (Input.GetButton("Jump") && !isInAir)
         {
-            rigidbody.AddForce(jumpForce);
+            // Transform jump direction into the player's local space
+            rigidbody.AddForce(transform.rotation * jumpForce);
             isInAir = true;
         }
 	}
