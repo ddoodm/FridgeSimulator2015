@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SlowPlayer : MonoBehaviour {
+public class SlowPlayer : MonoBehaviour
+{
+	private PlayerController player;
 
-
-	/*void OnTriggerEnter(Collider other)
+	void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Player") {
-			other.gameObject.GetComponent(PlayerController).
+			player = other.gameObject.GetComponent<PlayerController>();
+			player.isSlowed = true;
 		}
 	}
+
 	
-	
-	void onTriggerExit(Collider other) 
+	void OnTriggerExit(Collider other) 
 	{
-		//if (other.tag == "Player") 
-			//isSlowed = false;
-	}*/
+		if (other.tag == "Player") 
+			player.isSlowed = false;
+	}
 }

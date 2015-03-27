@@ -6,9 +6,8 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Inspector parameters for jump force (height) and gravity force.
     /// </summary>
-	public float
-        jumpForce       = 250.0f,
-        gravityForce    = 15.0f;
+    public Vector3 jumpForce = new Vector3(0.0f, 300.0f, 75.0f);
+	public float gravityForce   = 15.0f;
 
     /// <summary>
     /// The direction of parallel transfer per frame.
@@ -36,8 +35,7 @@ public class PlayerController : MonoBehaviour
 	/// <summary>
 	/// Flag used to slow player before rotating platform.
 	/// </summary>
-	public bool isSlowed { get; protected set; }
-
+	public bool isSlowed { get; set; }
 
     private GameController gameController;
 
@@ -61,13 +59,12 @@ public class PlayerController : MonoBehaviour
 		else
 			rigidbody.position += pathDirection * slowedSpeed;
 
-
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
 
         // Add jump force
         if (Input.GetButton("Jump") && !isInAir)
-            rigidbody.AddForce(Vector3.up * jumpForce);
+            rigidbody.AddForce(jumpForce);
 	}
 
     void OnCollisionEnter(Collision other)
@@ -86,28 +83,4 @@ public class PlayerController : MonoBehaviour
     {
         isInAir = true;
     }
-
-
-	void OnTriggerEnter(Collider other)
-	{
-		if (other.tag == "StaticRotatorPlatform") {
-			isSlowed = true;
-			
-		}
-
-		if (other.tag == "RotatingRotatorTrigger" && isSlowed) 
-		{
-			//do stuff here
-		}
-
-	}
-
-
-	void onTriggerExit(Collider other) 
-	{
-		if (other.tag == "StaticRotatorTrigger") 
-			isSlowed = false;
-	}
-
-
 }
