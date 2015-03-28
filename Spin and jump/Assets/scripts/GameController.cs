@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour
     /// The main player controller.
     /// </summary>
     public PlayerController player;
+	public Transform playerloc;
+	public Transform scorigin;
 
     /// <summary>
     /// The amount of score to add each frame the player is alive.
@@ -30,6 +32,11 @@ public class GameController : MonoBehaviour
 	public void AddScore(float newScoreValue)
 	{
 		score += newScoreValue;
+		updateScore ();
+	}
+	public void SetScore(float newScoreValue)
+	{
+		score = newScoreValue;
 		updateScore ();
 	}
 
@@ -54,8 +61,11 @@ public class GameController : MonoBehaviour
 	void Update()
 	{
         // The score integral is the player's time alive
-        if(!gameOver)
-            AddScore(scoreDelta * Time.deltaTime);
+        if (!gameOver) {
+			var dist = Vector3.Distance (playerloc.position, scorigin.position);
+			SetScore (dist);
+		}
+            //AddScore(scoreDelta * Time.deltaTime);
 
 		if (gameOver && Input.GetKeyDown (KeyCode.R))
 			Application.LoadLevel (Application.loadedLevel);
