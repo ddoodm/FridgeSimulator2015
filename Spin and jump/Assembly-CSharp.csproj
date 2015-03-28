@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
      <Compile Include="Assets\RotateSlowPlayer.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
@@ -58,6 +59,19 @@
      <Compile Include="Assets\Scripts\SlowPlayer.cs" />
      <Compile Include="Assets\Scripts\endGame.cs" />
      <Compile Include="Assets\Scripts\mover.cs" />
+=======
+     <Compile Include="Assets\RotateWithObject.cs" />
+     <Compile Include="Assets\scripts\CameraController.cs" />
+     <Compile Include="Assets\scripts\GameController.cs" />
+     <Compile Include="Assets\scripts\GameOverByPlane.cs" />
+     <Compile Include="Assets\scripts\PlayerController.cs" />
+     <Compile Include="Assets\scripts\PlayerTurner.cs" />
+     <Compile Include="Assets\scripts\Rotator.cs" />
+     <Compile Include="Assets\scripts\ShadowText.cs" />
+     <Compile Include="Assets\scripts\SlowPlayer.cs" />
+     <Compile Include="Assets\scripts\endGame.cs" />
+     <Compile Include="Assets\scripts\mover.cs" />
+>>>>>>> da9c9017bf029b5a8b661a48843362b529862465
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
