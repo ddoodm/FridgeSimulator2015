@@ -24,19 +24,12 @@ public class PlayerController : MonoBehaviour
 	/// <summary>
 	/// Flag used to slow player before rotating platform.
 	/// </summary>
-<<<<<<< HEAD
+    /// 
 	public bool isSlowed { get; set; }
 	/// <summary>
 	/// Flag used to allow player to jump onto spinning platform.
 	/// </summary>
 	public bool spinJump { get; set; }
-	/// <summary>
-	/// Flag used to slow and rotate player on a rotating platform.
-	/// </summary>
-	public bool onPlatform { get; set; }
-=======
-	public bool isSlowed { get; protected set; }
->>>>>>> da9c9017bf029b5a8b661a48843362b529862465
 
     private GameController gameController;
 
@@ -65,11 +58,11 @@ public class PlayerController : MonoBehaviour
         }
 
 		//rotates the player if it is on a spinning platform
+        /*
 		if (onPlatform) 
 		{
 			transform.Rotate (new Vector3 (0, 30, 0) * Time.deltaTime);
-		}
-
+		}*/
 	}
 
     void OnCollisionEnter(Collision other)

@@ -11,7 +11,7 @@ public class RotateSlowPlayer : MonoBehaviour {
 		if (other.tag == "Player") {
 			player = other.gameObject.GetComponent<PlayerController>();
 			player.isSlowed = true;
-			player.onPlatform = true;
+			//player.onPlatform = true;
 		}
 	}
 	
@@ -20,7 +20,7 @@ public class RotateSlowPlayer : MonoBehaviour {
 	{
 		if (other.tag == "Player") {
 			player.isSlowed = false;
-			player.onPlatform = false;
+			//player.onPlatform = false;
 		}
 	}
 }
