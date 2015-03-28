@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SlowPlayer : MonoBehaviour
-{
+public class JumpToPlatform : MonoBehaviour {
+
 	private PlayerController player;
 
 
@@ -10,14 +10,20 @@ public class SlowPlayer : MonoBehaviour
 	{
 		if (other.tag == "Player") {
 			player = other.gameObject.GetComponent<PlayerController>();
-			player.isSlowed = true;
+			if(player.isSlowed)
+			{
+				player.spinJump = true;
+			}
 		}
 	}
-
+	
 	
 	void OnTriggerExit(Collider other) 
 	{
 		if (other.tag == "Player") 
-			player.isSlowed = false;
+			if(!player.isSlowed)
+		{
+			player.spinJump = false;
+		}
 	}
 }
