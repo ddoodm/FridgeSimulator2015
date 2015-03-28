@@ -1,16 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Rotator : MonoBehaviour {
+public class Rotator : MonoBehaviour
+{
+    /// <summary>
+    /// The axis to rotate about
+    /// </summary>
+    public Vector3 axis = Vector3.up;
+    
+    /// <summary>
+    /// The speed at which to rotate
+    /// </summary>
+    public float speed = 30.0f;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		transform.Rotate (new Vector3 (0, 30, 0) * Time.deltaTime);
+    public float deltaRotation { get; protected set; }
+
+	void Update ()
+    {
+        deltaRotation = speed * Time.deltaTime;
+        transform.Rotate(axis * deltaRotation);
 	}
 	
 }

@@ -81,8 +81,11 @@ public class PlayerTurner : MonoBehaviour
         if (rotateState.direction != Direction.NONE)
             return;
 
-        // Do not turn while in the air
         if (playerController.isInAir)
+            return;
+
+        // Rotate only on a static platform
+        if (!playerController.onPlatform)
             return;
 
         if (Input.GetKey(KeyCode.D))

@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public float 
 		moveSpeed = 0.1f, 
-		slowedSpeed = 0.25f;
+		slowedSpeed = 0.025f;
 
     /// <summary>
     /// Flag used to constrain jumping to when the player is intersecting the floor.
@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 	/// <summary>
 	/// Flag used to slow player before rotating platform.
 	/// </summary>
-	public bool isSlowed { get; set; }
+	public bool isSlowed { get; protected set; }
 
     private GameController gameController;
 
@@ -63,5 +63,32 @@ public class PlayerController : MonoBehaviour
         // If the contact normal is (almost) up (flat surface), we are on the ground
         if (angleDelta < 0.25f)
             isInAir = false;
+    }
+
+    public void slowTo(float slowedSpeed)
+    {
+        this.slowedSpeed = slowedSpeed;
+        this.isSlowed = true;
+    }
+
+    public void stopSlow()
+    {
+        this.isSlowed = false;
+    }
+
+    public bool onPlatform
+    {
+        get
+        {
+            // Cast a ray down to determine whether we're over a platform
+            RaycastHit hit;
+            if (!Physics.Raycast(new Ray(transform.position, Vector3.down), out hit))
+                return false;
+
+            if (hit.collider.tag == "Platform")
+                return true;
+
+            return false;
+        }
     }
 }

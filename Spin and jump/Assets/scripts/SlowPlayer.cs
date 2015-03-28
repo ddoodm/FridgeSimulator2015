@@ -3,20 +3,23 @@ using System.Collections;
 
 public class SlowPlayer : MonoBehaviour
 {
+    public float slowSpeed = 0.025f;
+
 	private PlayerController player;
 
-	void OnTriggerEnter(Collider other)
+	void OnCollisionEnter(Collision c)
 	{
-		if (other.tag == "Player") {
-			player = other.gameObject.GetComponent<PlayerController>();
-			player.isSlowed = true;
+		if (c.gameObject.tag == "Player")
+        {
+			player = c.gameObject.GetComponent<PlayerController>();
+            player.slowTo(slowSpeed);
 		}
 	}
 
-	
-	void OnTriggerExit(Collider other) 
+
+    void OnCollisionExit(Collision c) 
 	{
-		if (other.tag == "Player") 
-			player.isSlowed = false;
+        if (c.gameObject.tag == "Player")
+            player.stopSlow();
 	}
 }
