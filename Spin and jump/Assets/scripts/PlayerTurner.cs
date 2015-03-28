@@ -88,9 +88,19 @@ public class PlayerTurner : MonoBehaviour
         if (!playerController.onPlatform)
             return;
 
+        // Allow turns only in "TurnTrigger" boxes
+        if (!playerController.canTurn)
+            return;
+
         if (Input.GetKey(KeyCode.D))
+        {
             rotateState.rotate(Direction.RIGHT, Time.time);
+            playerController.canTurn = false;
+        }
         else if (Input.GetKey(KeyCode.A))
+        {
             rotateState.rotate(Direction.LEFT, Time.time);
+            playerController.canTurn = false;
+        }
     }
 }

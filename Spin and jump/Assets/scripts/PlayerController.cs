@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public bool spinJump { get; set; }
 
+    public bool canTurn { get; set; }
+
     /// <summary>
     /// Access to Unity types
     /// </summary>

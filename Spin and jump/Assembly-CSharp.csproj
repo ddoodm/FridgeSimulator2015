@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\RotateSlowPlayer.cs" />
      <Compile Include="Assets\RotateWithObject.cs" />
+     <Compile Include="Assets\TurnTrigger.cs" />
      <Compile Include="Assets\scripts\CameraController.cs" />
      <Compile Include="Assets\scripts\GameController.cs" />
      <Compile Include="Assets\scripts\GameOverByPlane.cs" />
