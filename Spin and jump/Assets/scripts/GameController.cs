@@ -11,7 +11,6 @@ public class GameController : MonoBehaviour
     /// The main player controller.
     /// </summary>
     public PlayerController player;
-	public Transform playerloc;
 	public Transform scorigin;
 
     /// <summary>
@@ -61,11 +60,16 @@ public class GameController : MonoBehaviour
 	void Update()
 	{
         // The score integral is the player's time alive
-        if (!gameOver) {
-			var dist = Vector3.Distance (playerloc.position, scorigin.position);
-			SetScore (dist);
+        if (!gameOver)
+        {
+			float dist = Vector3.Distance (player.transform.position, scorigin.position);
+            SetScore(dist);
+
+            /* Use this instead for velocity-based scoring
+            float dist = player.velocityMagnitude * scoreDelta;
+			AddScore (dist);
+             */
 		}
-            //AddScore(scoreDelta * Time.deltaTime);
 
 		if (gameOver && Input.GetKeyDown (KeyCode.R))
 			Application.LoadLevel (Application.loadedLevel);

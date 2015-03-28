@@ -31,7 +31,15 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public bool spinJump { get; set; }
 
+    /// <summary>
+    /// Access to Unity types
+    /// </summary>
+    public GameObject gameObject { get { return base.gameObject; } }
+    public Transform transform { get { return base.transform; } }
+
     private GameController gameController;
+
+    private Vector3 oldPosition;
 
     void Start()
     {
@@ -41,10 +49,13 @@ public class PlayerController : MonoBehaviour
 	void LateUpdate()
 	{
         // Parallel transform along the path (infinite force).
-        if(!gameController.isGameOver && !isSlowed)
-            rigidbody.position += transform.forward * moveSpeed;
-		else
-            rigidbody.position += transform.forward * slowedSpeed;
+        if (!isInAir)
+        {
+            if (!gameController.isGameOver && !isSlowed)
+                rigidbody.position += transform.forward * moveSpeed;
+            else
+                rigidbody.position += transform.forward * slowedSpeed;
+        }
 
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
@@ -63,6 +74,8 @@ public class PlayerController : MonoBehaviour
 		{
 			transform.Rotate (new Vector3 (0, 30, 0) * Time.deltaTime);
 		}*/
+
+        oldPosition = rigidbody.position;
 	}
 
     void OnCollisionEnter(Collision other)
@@ -86,6 +99,18 @@ public class PlayerController : MonoBehaviour
     public void stopSlow()
     {
         this.isSlowed = false;
+    }
+
+    public float velocityMagnitude
+    {
+        get
+        {
+            if (isInAir)
+                return 0.0f;
+            if (isSlowed)
+                return slowedSpeed;
+            return moveSpeed;
+        }
     }
 
     public bool onPlatform

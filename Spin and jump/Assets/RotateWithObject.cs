@@ -16,7 +16,10 @@ public class RotateWithObject : MonoBehaviour
         if (c.gameObject.tag == "Player")
         {
             GameObject player = c.gameObject;
-            player.transform.Rotate(rotator.axis, rotator.deltaRotation);
+
+            Vector3 dist = rotator.transform.position - player.transform.position;
+            dist.Scale(new Vector3(1.0f, 0.0f, 1.0f));
+            player.transform.RotateAround(rotator.transform.position, rotator.axis, rotator.deltaRotation);
         }
     }
 }
