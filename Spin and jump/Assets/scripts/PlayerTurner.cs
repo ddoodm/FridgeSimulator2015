@@ -32,6 +32,7 @@ public class PlayerTurner : MonoBehaviour
     /// The curve that describes how the player turns
     /// </summary>
     public AnimationCurve turnSpeed;
+    public float correctionSpeed = 0.05f;
 
     private PlayerController playerController;
     private RotateState rotateState = new RotateState();
@@ -78,7 +79,7 @@ public class PlayerTurner : MonoBehaviour
             // If we're not rotating, tend towards the nearest 90'.
             float rightAngle = Mathf.Round(transform.rotation.eulerAngles.y / 90.0f) * 90.0f;
             float rightDelta = transform.rotation.eulerAngles.y - rightAngle;
-            transform.Rotate(Vector3.up, -rightDelta * 0.25f);
+            transform.Rotate(Vector3.up, -rightDelta * correctionSpeed);
         }
     }
 
