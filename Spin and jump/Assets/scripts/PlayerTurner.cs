@@ -73,6 +73,13 @@ public class PlayerTurner : MonoBehaviour
                 transform.Rotate(new Vector3(0.0f, rightAngle, 0.0f) - transform.rotation.eulerAngles);
             }
         }
+        else if(playerController.onPlatform)
+        {
+            // If we're not rotating, tend towards the nearest 90'.
+            float rightAngle = Mathf.Round(transform.rotation.eulerAngles.y / 90.0f) * 90.0f;
+            float rightDelta = transform.rotation.eulerAngles.y - rightAngle;
+            transform.Rotate(Vector3.up, -rightDelta * 0.25f);
+        }
     }
 
     void getRotationRequest()

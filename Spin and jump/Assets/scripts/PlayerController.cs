@@ -119,15 +119,23 @@ public class PlayerController : MonoBehaviour
     {
         get
         {
+            return currentPlatform != null;
+        }
+    }
+
+    public GameObject currentPlatform
+    {
+        get
+        {
             // Cast a ray down to determine whether we're over a platform
             RaycastHit hit;
             if (!Physics.Raycast(new Ray(transform.position, Vector3.down), out hit))
-                return false;
+                return null;
 
             if (hit.collider.tag == "Platform")
-                return true;
+                return hit.collider.gameObject;
 
-            return false;
+            return null;
         }
     }
 }
