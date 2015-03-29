@@ -13,9 +13,10 @@ public class PlayerController : MonoBehaviour
     /// The amount of parallel transfer per frame.
     /// (Temp.)
     /// </summary>
-    public float 
-		moveSpeed = 0.1f, 
-		slowedSpeed = 0.025f;
+    public float
+        moveSpeed = 0.1f,
+        slowedSpeed = 0.025f,
+        correctionSpeed = 0.01f;
 
     /// <summary>
     /// Flag used to constrain jumping to when the player is intersecting the floor.
@@ -70,6 +71,18 @@ public class PlayerController : MonoBehaviour
             isInAir = true;
         }
 
+        // Tend towards the middle of the current platform
+        GameObject currentPlatform = this.currentPlatform;
+        if (currentPlatform != null && currentPlatform.name.StartsWith("PF_Platform_S_Path"))
+        {
+            Vector3 platformRight = currentPlatform.transform.right;
+            platformRight = new Vector3(Mathf.Abs(platformRight.x), Mathf.Abs(platformRight.y), Mathf.Abs(platformRight.z));
+            Vector3 playerPos = this.transform.position;
+            Vector3 platformPos = currentPlatform.transform.position;
+            Vector3 distance = Vector3.Scale(platformPos - playerPos, platformRight);
+            this.rigidbody.position += distance * correctionSpeed * Time.deltaTime;
+        }
+
 		//rotates the player if it is on a spinning platform
         /*
 		if (onPlatform) 
@@ -108,7 +121,11 @@ public class PlayerController : MonoBehaviour
         get
         {
             if (isInAir)
-                return 0.0f;
+            {
+                // Do not count 'up' velocity when jumping and falling
+                Vector3 yLock = new Vector3(1.0f, 0.0f, 1.0f);
+                return Vector3.Scale(rigidbody.velocity, yLock).magnitude * Time.deltaTime;
+            }
             if (isSlowed)
                 return slowedSpeed;
             return moveSpeed;

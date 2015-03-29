@@ -62,13 +62,14 @@ public class GameController : MonoBehaviour
         // The score integral is the player's time alive
         if (!gameOver)
         {
-			float dist = Vector3.Distance (player.transform.position, scorigin.position);
+			/* Rob's distance-based counter. Disabled in order to allow score to increment regardless of position
+            float dist = Vector3.Distance (player.transform.position, scorigin.position);
             SetScore(dist);
+             */
 
-            /* Use this instead for velocity-based scoring
+            // New velocity-based scoring
             float dist = player.velocityMagnitude * scoreDelta;
 			AddScore (dist);
-             */
 		}
 
 		if (gameOver && Input.GetKeyDown (KeyCode.R))
