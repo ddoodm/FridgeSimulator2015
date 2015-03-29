@@ -17,9 +17,11 @@ public class progen : MonoBehaviour {
 			{
 			case 0:
 				Instantiate (platformStraight,spawner.position,spawner.rotation);
+				Debug.Log ("spawn straight");
 				break;
 			case 1:
 				Instantiate (platformRotating,spawner.position,spawner.rotation);
+				Debug.Log ("spawn spin");
 				break;
 
 			default:
