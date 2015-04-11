@@ -8,10 +8,12 @@ public class progen : MonoBehaviour {
 	public GameObject platformRotating;
 	public GameObject PlatformCorner;
 
+	public GameObject platformWallRun;
+
 	void OnTriggerEnter(Collider other)
 	{
-		int choice = Random.Range (0, 2);
-		
+		int choice = Random.Range (0, 3);
+		//choice = 3;
 		if (other.tag == "Player") {
 		switch(choice)
 			{
@@ -23,14 +25,19 @@ public class progen : MonoBehaviour {
 				Instantiate (platformRotating,spawner.position,spawner.rotation);
 				Debug.Log ("spawn spin");
 				break;
+			case 2:
+				Instantiate (PlatformCorner,spawner.position,spawner.rotation);
+				break;
+
+			case 3:
+				Instantiate (platformWallRun,spawner.position,spawner.rotation);
+				break;
 
 			default:
 				Instantiate (platformStraight,spawner.position,spawner.rotation);
 				break;
 			//Currently can only spawn straight or spinning platforms no corners
-			/*case 2:
-				Instantiate (PlatformCorner,spawner.position,spawner.rotation);
-				break;*/
+			
 			}
 
 

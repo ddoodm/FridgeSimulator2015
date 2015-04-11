@@ -13,8 +13,8 @@ public class progenR : MonoBehaviour {
 	void OnTriggerEnter(Collider other)
 	{
 		int spawnchoice = Random.Range (0, 3);
-//		int choice = Random.Range (0, 1);  Eventually have it random between either straight or corner
-		int choice = 0;
+		int choice = Random.Range (0, 2);//  Eventually have it random between either straight or corner
+//		int choice = 0;
 //		Debug.Log (choice);
 		if (other.tag == "Player") {
 			switch (spawnchoice)
@@ -71,5 +71,6 @@ public class progenR : MonoBehaviour {
 			
 			
 		}
+
 	}
 }

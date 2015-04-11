@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 oldPosition;
 
+	private bool wallrunning = false;
+
     void Start()
     {
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
@@ -70,6 +72,12 @@ public class PlayerController : MonoBehaviour
             rigidbody.AddForce(transform.rotation * jumpForce);
             isInAir = true;
         }
+
+		if (Input.GetButtonDown ("Jump") && wallrunning) {
+			//code here to make the player 'stick to the wall'
+			//you can turn gravity off but then you shoot into the sky
+		}
+
 
         // Tend towards the middle of the current platform
         GameObject currentPlatform = this.currentPlatform;
@@ -103,7 +111,23 @@ public class PlayerController : MonoBehaviour
         // If the contact normal is (almost) up (flat surface), we are on the ground
         if (angleDelta < 0.25f)
             isInAir = false;
+
     }
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.tag == "wallrunning") {
+			wallrunning = true;
+		}
+	}
+
+	void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "wallrunning")
+		{
+			wallrunning = false;
+		}
+	}
 
     public void slowTo(float slowedSpeed)
     {
