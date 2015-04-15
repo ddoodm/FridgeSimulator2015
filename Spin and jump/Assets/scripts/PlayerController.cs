@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     /// Inspector parameters for jump force (height) and gravity force.
     /// </summary>
     public Vector3 jumpForce = new Vector3(0.0f, 300.0f, 75.0f);
+	public Vector3 tempPos;
 	public float gravityForce   = 15.0f;
 
     /// <summary>
@@ -32,6 +33,13 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public bool spinJump { get; set; }
 
+	/// <summary>
+	/// Flags used to allow player to jump and run along wall platforms.
+	/// </summary>
+	public bool wallJump { get; set; }
+	public bool wallRunning { get; set; }
+
+
     public bool canTurn { get; set; }
 
     /// <summary>
@@ -43,9 +51,7 @@ public class PlayerController : MonoBehaviour
     private GameController gameController;
 
     private Vector3 oldPosition;
-
-	private bool wallrunning = false;
-
+	
     void Start()
     {
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
@@ -73,9 +79,21 @@ public class PlayerController : MonoBehaviour
             isInAir = true;
         }
 
-		if (Input.GetButtonDown ("Jump") && wallrunning) {
-			//code here to make the player 'stick to the wall'
-			//you can turn gravity off but then you shoot into the sky
+		//allow wall running
+		if (Input.GetButtonDown ("Jump") && wallJump) {
+			wallRunning = true;
+			wallJump = false;
+			Debug.Log ("Wallrunning");
+
+		} 
+
+		//while wall running
+		if (wallRunning) {
+			rigidbody.position += transform.forward * moveSpeed;
+			tempPos = rigidbody.position;
+			tempPos.y = 2.0f;
+			tempPos.x = 2.0f;
+			rigidbody.position = tempPos;
 		}
 
 
@@ -114,7 +132,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-	void OnTriggerEnter(Collider other)
+	/*void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "wallrunning") {
 			wallrunning = true;
@@ -127,7 +145,7 @@ public class PlayerController : MonoBehaviour
 		{
 			wallrunning = false;
 		}
-	}
+	}*/
 
     public void slowTo(float slowedSpeed)
     {

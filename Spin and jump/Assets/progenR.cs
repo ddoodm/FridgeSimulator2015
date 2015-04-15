@@ -15,7 +15,7 @@ public class progenR : MonoBehaviour {
 		int spawnchoice = Random.Range (0, 3);
 		int choice = Random.Range (0, 2);//  Eventually have it random between either straight or corner
 //		int choice = 0;
-//		Debug.Log (choice);
+//		Debug.Log (choice)
 		if (other.tag == "Player") {
 			switch (spawnchoice)
 			{
