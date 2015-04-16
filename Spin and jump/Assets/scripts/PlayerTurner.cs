@@ -74,7 +74,7 @@ public class PlayerTurner : MonoBehaviour
                 transform.Rotate(new Vector3(0.0f, rightAngle, 0.0f) - transform.rotation.eulerAngles);
             }
         }
-        else if(playerController.onPlatform)
+        else if(playerController.onPlatform && !playerController.isInAir)
         {
             // If we're not rotating, tend towards the nearest 90'.
             float rightAngle = Mathf.Round(transform.rotation.eulerAngles.y / 90.0f) * 90.0f;

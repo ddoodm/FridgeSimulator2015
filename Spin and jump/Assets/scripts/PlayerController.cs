@@ -39,8 +39,12 @@ public class PlayerController : MonoBehaviour
 	public bool wallJump { get; set; }
 	public bool wallRunning { get; set; }
 
-
     public bool canTurn { get; set; }
+
+    /// <summary>
+    /// The tag names for all existing platform types
+    /// </summary>
+    public string[] platformTags = new string[] {"Platform", "Spinner"};
 
     /// <summary>
     /// Access to Unity types
@@ -99,7 +103,7 @@ public class PlayerController : MonoBehaviour
 
         // Tend towards the middle of the current platform
         GameObject currentPlatform = this.currentPlatform;
-        if (currentPlatform != null && currentPlatform.name.StartsWith("PF_Platform_S_Path"))
+        if (currentPlatform != null && currentPlatform.name.StartsWith("PF_Platform_S_Path") && !isInAir)
         {
             Vector3 platformRight = currentPlatform.transform.right;
             platformRight = new Vector3(Mathf.Abs(platformRight.x), Mathf.Abs(platformRight.y), Mathf.Abs(platformRight.z));
@@ -193,6 +197,23 @@ public class PlayerController : MonoBehaviour
 
             if (hit.collider.tag == "Platform")
                 return hit.collider.gameObject;
+
+            return null;
+        }
+    }
+
+    public GameObject objectUnderPlayer
+    {
+        get
+        {
+            // Cast a ray down to determine whether we're over a platform
+            RaycastHit hit;
+            if (!Physics.Raycast(new Ray(transform.position, Vector3.down), out hit))
+                return null;
+
+            foreach (string tagName in platformTags)
+                if (hit.collider.tag == tagName)
+                    return hit.collider.gameObject;
 
             return null;
         }
