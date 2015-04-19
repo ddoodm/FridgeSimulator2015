@@ -16,7 +16,7 @@ public class progenR : MonoBehaviour {
 		int choice = Random.Range (0, 2);//  Eventually have it random between either straight or corner
 //		int choice = 0;
 //		Debug.Log (choice)
-		if (other.tag == "Player") {
+		if (other.tag == "Fake") {
 			switch (spawnchoice)
 			{
 			case 0:
@@ -32,6 +32,7 @@ public class progenR : MonoBehaviour {
 				Debug.Log ("spawn forward");
 				break;
 			case 1:
+				other.GetComponent<fakePlayer>().turnRight ();
 				switch(choice)
 				{
 				case 0:
@@ -44,6 +45,7 @@ public class progenR : MonoBehaviour {
 				Debug.Log ("spawn right");
 				break;
 			case 2:
+				other.GetComponent<fakePlayer>().turnLeft ();
 				switch(choice)
 				{
 				case 0:
@@ -56,6 +58,7 @@ public class progenR : MonoBehaviour {
 				Debug.Log ("spawn left");
 				break;
 			case 3:
+				other.GetComponent<fakePlayer>().turnLeft ();
 				switch(choice)
 				{
 				case 0:

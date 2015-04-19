@@ -15,7 +15,8 @@ public class progenC : MonoBehaviour {
 		Quaternion locR = spawner.rotation;
 		//locR.y = 45;
 
-		if (other.tag == "Player") {
+		if (other.tag == "Fake") {
+			other.GetComponent<fakePlayer>().turnLeft ();
 			switch(choice)
 			{
 			case 0:

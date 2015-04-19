@@ -14,7 +14,7 @@ public class progen : MonoBehaviour {
 	{
 		int choice = Random.Range (0, 3);
 		//choice = 3;
-		if (other.tag == "Player") {
+		if (other.tag == "Fake") {
 		switch(choice)
 			{
 			case 0:

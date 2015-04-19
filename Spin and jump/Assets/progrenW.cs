@@ -13,7 +13,7 @@ public class progrenW : MonoBehaviour {
 	void OnTriggerEnter(Collider other)
 	{
 		int choice = Random.Range (0, 3);
-		if (other.tag == "Player") {
+		if (other.tag == "Fake") {
 			switch(choice)
 			{
 			case 0:
