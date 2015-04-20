@@ -18,6 +18,16 @@ public class PlayerController : MonoBehaviour
         moveSpeed = 0.1f,
         slowedSpeed = 0.025f,
         correctionSpeed = 0.01f;
+	
+	/// <summary>
+	/// position of the player before wallrunning.
+	/// </summary>
+	public Vector3 tempWallJump;
+
+	/// <summary>
+	/// Flag to determine what direction the player is in.
+	/// </summary>
+	public int direction;
 
     /// <summary>
     /// Flag used to constrain jumping to when the player is intersecting the floor.
@@ -81,22 +91,46 @@ public class PlayerController : MonoBehaviour
             // Transform jump direction into the player's local space
             rigidbody.AddForce(transform.rotation * jumpForce);
             isInAir = true;
+
+			if (wallJump) {
+				tempWallJump.x = rigidbody.position.x + 2.0f;
+				tempWallJump.y = rigidbody.position.y + 2.0f;
+				tempWallJump.z = rigidbody.position.z + 2.0f;
+				wallRunning = true;
+				wallJump = false;
+				Debug.Log ("Wallrunning");
+			}
+
+
+
         }
 
 		//allow wall running
-		if (Input.GetButtonDown ("Jump") && wallJump) {
+		/*if (Input.GetButtonDown ("Jump") && wallJump) {
+			tempWallJump.x = rigidbody.position.x + 2.0f;
+			tempWallJump.y = rigidbody.position.y + 2.0f;
+			tempWallJump.z = rigidbody.position.z + 2.0f;
+
+			if (!isInAir){
+				wallRunning = true;
+			}
 			wallRunning = true;
 			wallJump = false;
 			Debug.Log ("Wallrunning");
 
-		} 
+		} */
 
 		//while wall running
 		if (wallRunning) {
 			rigidbody.position += transform.forward * moveSpeed;
 			tempPos = rigidbody.position;
-			tempPos.y = 2.0f;
-			tempPos.x = 2.0f;
+			tempPos.y = tempWallJump.y;
+
+			//add flag for whether player is travelling along x or z axis
+
+			tempPos.x = tempWallJump.x;
+
+
 			rigidbody.position = tempPos;
 		}
 
@@ -135,21 +169,6 @@ public class PlayerController : MonoBehaviour
             isInAir = false;
 
     }
-
-	/*void OnTriggerEnter(Collider other)
-	{
-		if (other.tag == "wallrunning") {
-			wallrunning = true;
-		}
-	}
-
-	void OnTriggerExit(Collider other)
-	{
-		if (other.tag == "wallrunning")
-		{
-			wallrunning = false;
-		}
-	}*/
 
     public void slowTo(float slowedSpeed)
     {

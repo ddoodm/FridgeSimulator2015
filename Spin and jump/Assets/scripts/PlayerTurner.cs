@@ -33,7 +33,7 @@ public class PlayerTurner : MonoBehaviour
     /// </summary>
     public AnimationCurve turnSpeed;
     public float correctionSpeed = 0.05f;
-
+	
     private PlayerController playerController;
     private RotateState rotateState = new RotateState();
 
