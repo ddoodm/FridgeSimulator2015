@@ -71,6 +71,11 @@ public class PlayerController : MonoBehaviour
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
     }
 
+    void Update()
+    {
+        Debug.DrawRay(this.transform.position, Vector3.down);
+    }
+
 	void LateUpdate()
 	{
         // Parallel transform along the path (infinite force).
@@ -230,9 +235,12 @@ public class PlayerController : MonoBehaviour
             if (!Physics.Raycast(new Ray(transform.position, Vector3.down), out hit))
                 return null;
 
+            /* == Filter based on tag ==
             foreach (string tagName in platformTags)
-                if (hit.collider.tag == tagName)
+                if (hit.collider.gameObject.tag == tagName)
                     return hit.collider.gameObject;
+             */
+            return hit.collider.gameObject;
 
             return null;
         }

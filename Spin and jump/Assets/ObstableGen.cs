@@ -8,7 +8,7 @@ public class ObstableGen : MonoBehaviour
 {
     public GameObject[] obstaclePrefabs;
 
-    public float probability = 0.25f;
+    public float probability = 0.5f;
     public float pathWidth = 2.5f;
     public float pathLength = 10.0f;
     public float obstacleWidth = 1.5f;
