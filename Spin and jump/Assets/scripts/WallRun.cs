@@ -18,8 +18,9 @@ public class WallRun : MonoBehaviour {
 	
 	void OnTriggerExit(Collider other) 
 	{
-		if (other.tag == "Player") 
-			Debug.Log("Fallen from wallrun");
+		if (other.tag == "Player") {
+			Debug.Log ("Fallen from wallrun");
 			player.wallRunning = false;
+		}
 	} 
 }

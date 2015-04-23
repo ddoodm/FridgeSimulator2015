@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 	public Vector3 tempWallJump;
 
 	/// <summary>
-	/// Flag to determine what direction the player is in.
+	/// Flag to determine what direction the player is in, will turn into an enum later if code is unreadable.
 	/// </summary>
 	public int direction;
 
@@ -78,6 +78,7 @@ public class PlayerController : MonoBehaviour
 
 	void LateUpdate()
 	{
+
         // Parallel transform along the path (infinite force).
         if (!isInAir)
         {
@@ -89,7 +90,6 @@ public class PlayerController : MonoBehaviour
 
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
-
         // Add jump force
         if (Input.GetButton("Jump") && !isInAir)
         {
@@ -98,17 +98,49 @@ public class PlayerController : MonoBehaviour
             isInAir = true;
 
 			if (wallJump) {
-				tempWallJump.x = rigidbody.position.x + 2.0f;
 				tempWallJump.y = rigidbody.position.y + 2.0f;
-				tempWallJump.z = rigidbody.position.z + 2.0f;
+				direction = -1;
+
+				if (Mathf.Abs (rigidbody.velocity.normalized.x) > Mathf.Abs (rigidbody.velocity.normalized.z))
+				{
+					if (rigidbody.velocity.normalized.x > 0) 
+					{
+						tempWallJump.z = rigidbody.position.z + 2.0f;
+						direction = 0;
+					} 
+					else if (rigidbody.velocity.normalized.x < 0) 
+					{
+						tempWallJump.z = rigidbody.position.z - 2.0f;
+						direction = 0;
+					}
+				}
+
+
+				if (Mathf.Abs (rigidbody.velocity.normalized.z) > Mathf.Abs(rigidbody.velocity.normalized.x))
+				{
+					if (rigidbody.velocity.normalized.z > 0) 
+					{
+						tempWallJump.x = rigidbody.position.x - 2.0f;
+						direction = 1;
+					} 
+					else if (rigidbody.velocity.normalized.z < 0) 
+					{
+						tempWallJump.x = rigidbody.position.x + 2.0f;
+						direction = 1;
+					}
+				}
+
+
 				wallRunning = true;
 				wallJump = false;
 				Debug.Log ("Wallrunning");
+				Debug.Log ("Direction = " + direction);
 			}
 
 
 
         }
+
 
 		//allow wall running
 		/*if (Input.GetButtonDown ("Jump") && wallJump) {
@@ -133,7 +165,14 @@ public class PlayerController : MonoBehaviour
 
 			//add flag for whether player is travelling along x or z axis
 
-			tempPos.x = tempWallJump.x;
+			if (direction == 0)
+			{
+				tempPos.z = tempWallJump.z;
+			}
+			if (direction == 1)
+			{
+				tempPos.x = tempWallJump.x;
+			}
 
 
 			rigidbody.position = tempPos;

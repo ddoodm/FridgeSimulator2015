@@ -13,7 +13,7 @@ public class progen : MonoBehaviour {
 	void OnTriggerEnter(Collider other)
 	{
 		int choice = Random.Range (0, 3);
-		//choice = 3;
+		choice = 3;
 		if (other.tag == "Fake") {
 		switch(choice)
 			{
