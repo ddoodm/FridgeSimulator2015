@@ -26,9 +26,10 @@ public class ObstableGen : MonoBehaviour
         int prefabId = Random.Range(0, obstaclePrefabs.Length-1);
         GameObject prefab = obstaclePrefabs[prefabId];
 
+        // Spawn on a random side (L or R), half-way up the path
         float side = Mathf.Round(Random.value) * 2.0f - 1.0f;
         Vector3 xOffset = this.transform.right * side * (pathWidth - obstacleWidth);
-        Vector3 zOffset = this.transform.forward * (pathLength - obstacleWidth);
+        Vector3 zOffset = this.transform.forward * (pathLength + obstacleWidth) / 2.0f;
         Vector3 position = this.transform.position + xOffset + zOffset;
 
         GameObject obstInst = Instantiate(prefab, position, Quaternion.identity) as GameObject;

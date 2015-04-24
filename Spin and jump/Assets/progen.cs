@@ -12,8 +12,8 @@ public class progen : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		int choice = Random.Range (0, 3);
-		choice = 3;
+		int choice = Random.Range (0, 4);
+		// choice = 3; < Who did this??? :\
 		if (other.tag == "Fake") {
 		switch(choice)
 			{

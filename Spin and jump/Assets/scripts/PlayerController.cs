@@ -16,8 +16,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public float
         moveSpeed = 0.1f,
-        slowedSpeed = 0.025f,
-        correctionSpeed = 0.01f;
+        slowedSpeed = 0.025f;
 	
 	/// <summary>
 	/// position of the player before wallrunning.
@@ -178,19 +177,6 @@ public class PlayerController : MonoBehaviour
 			rigidbody.position = tempPos;
 		}
 
-
-        // Tend towards the middle of the current platform
-        GameObject currentPlatform = this.currentPlatform;
-        if (currentPlatform != null && currentPlatform.name.StartsWith("PF_Platform_S_Path") && !isInAir)
-        {
-            Vector3 platformRight = currentPlatform.transform.right;
-            platformRight = new Vector3(Mathf.Abs(platformRight.x), Mathf.Abs(platformRight.y), Mathf.Abs(platformRight.z));
-            Vector3 playerPos = this.transform.position;
-            Vector3 platformPos = currentPlatform.transform.position;
-            Vector3 distance = Vector3.Scale(platformPos - playerPos, platformRight);
-            this.rigidbody.position += distance * correctionSpeed * Time.deltaTime;
-        }
-
 		//rotates the player if it is on a spinning platform
         /*
 		if (onPlatform) 
@@ -281,7 +267,7 @@ public class PlayerController : MonoBehaviour
              */
             return hit.collider.gameObject;
 
-            return null;
+            // return null;
         }
     }
 }
