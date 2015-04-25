@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\BiasPosition.cs" />
      <Compile Include="Assets\Boundary.cs" />
+     <Compile Include="Assets\DPathGen.cs" />
      <Compile Include="Assets\KillOnContact.cs" />
      <Compile Include="Assets\ObstableGen.cs" />
      <Compile Include="Assets\PlatformDestroyTrigger.cs" />

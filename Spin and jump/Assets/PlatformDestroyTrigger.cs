@@ -26,12 +26,33 @@ public class PlatformDestroyTrigger : MonoBehaviour
         dropper.drop();
     }
 
-    void Update()
+    void LateUpdate()
     {
         cPlatform = playerController.objectUnderPlayer;
 
+        int cPlatformID = cPlatform == null ? -1 : cPlatform.GetInstanceID();
+        int pPlatformID = pPlatform == null ? -1 : pPlatform.GetInstanceID();
+
+        if(cPlatformID != pPlatformID)
+        {
+            if (pPlatform != null)
+            {
+                bool pPlatformIsValid = false;
+                foreach (string tag in playerController.platformTags)
+                    if (tag == pPlatform.tag)
+                        pPlatformIsValid = true;
+
+                if (pPlatformIsValid)
+                {
+                    Debug.Log("Dropping platform " + pPlatform);
+                    dropPlatform(pPlatform);
+                }
+            }
+        }
+
+        /*
         // The player is no longer on the (previous) platform, so tell it to go away
-        if (cPlatform != pPlatform && pPlatform != null)
+        if (cPlatformID != pPlatformID && pPlatform != null)
         {
             // Check whether we're over a gate (or similar)
             bool cPlatformIsInvalid = true;
@@ -47,7 +68,7 @@ public class PlatformDestroyTrigger : MonoBehaviour
                 Debug.Log(string.Format("PlatformDestroyTrigger - pPlatform:{0}, cPlatform:{1}", pPlatform, cPlatform));
                 dropPlatform(pPlatform);
             }
-        }
+        }*/
 
         pPlatform = cPlatform;
     }

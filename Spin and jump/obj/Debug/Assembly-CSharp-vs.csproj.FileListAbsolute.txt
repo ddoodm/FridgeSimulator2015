@@ -10,3 +10,5 @@ N:\GameStudioOne\GameStudioOne\Spin and jump\Temp\bin\Debug\ICSharpCode.NRefacto
 N:\GameStudioOne\GameStudioOne\Spin and jump\obj\Debug\Assembly-CSharp-vs.csprojResolveAssemblyReference.cache
 N:\GameStudioOne\GameStudioOne\Spin and jump\obj\Debug\Assembly-CSharp.dll
 N:\GameStudioOne\GameStudioOne\Spin and jump\obj\Debug\Assembly-CSharp.pdb
+D:\GameStudioOne\Spin and jump\obj\Debug\Assembly-CSharp-vs.csprojResolveAssemblyReference.cache
+D:\GameStudioOne\Spin and jump\obj\Debug\Assembly-CSharp.dll

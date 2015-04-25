@@ -15,27 +15,12 @@ public class Rotator : MonoBehaviour
 
     public float deltaRotation { get; protected set; }
 
-	private int direction = 0; // 0 is right, 1 is left
-	void Start()
-	{
-		direction = Random.Range (0, 2);
-		Debug.Log (direction);
+	public int direction = -1; // -1 is left, 1 is right
 
-	}
 	void Update ()
     {
-		switch (direction) {
-		case 1:
-			deltaRotation = -speed * Time.deltaTime;
-			transform.Rotate(axis * deltaRotation);
-			break;
-		default:
-			deltaRotation = speed * Time.deltaTime;
-			transform.Rotate(axis * deltaRotation);
-			break;
-
-		}
-
+		deltaRotation = direction * speed * Time.deltaTime;
+		transform.Rotate(axis * deltaRotation);
 	}
 	
 }
