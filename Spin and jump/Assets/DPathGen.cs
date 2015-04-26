@@ -51,7 +51,7 @@ public class DPathGen : MonoBehaviour
     /// <summary>
     /// The maximum number of new platforms that may be created per update
     /// </summary>
-    public int maxPerFrame = 24;
+    public int maxPerFrame = 3;
 
     /// <summary>
     /// The direction in which the path is currently travelling
@@ -70,6 +70,7 @@ public class DPathGen : MonoBehaviour
         tiles = new Stack<PathTile>();
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 
+        // The first tile will spawn as if there was an imaginary 'S' path behind it
         tiles.Push(prefab_path_s);
         lastType = tiles.Peek().type;
 
@@ -82,13 +83,21 @@ public class DPathGen : MonoBehaviour
     {
         int genCount = maxPerFrame;
         bool collision = false;
-        while ((player.transform.position - worldPos).magnitude < spawnDistance
+
+        /*
+         * New tiles are spawned each frame, so long as the following conditions are met:
+         * - The player is near enough to the last tile
+         * - We have not exceeded the 'max tiles per frame' limit
+         * - There is no collision with the world (exceptional case)
+         */
+        while (
+            (player.transform.position - worldPos).magnitude < spawnDistance
             && genCount --> 0
             && !collision)
-            collision = !generateClump();
+                collision = !fsmPathGen();
     }
 
-    private bool generateClump()
+    private bool fsmPathGen()
     {
         PathType nextType = PathType.PATH_S;
 
@@ -199,7 +208,7 @@ public class DPathGen : MonoBehaviour
     private bool spawn(PathTile prefab, float newDirection)
     {
         // Check whether instantiation would result in a collision with another path
-        if (willCollide(prefab))
+        if (willCollide(prefab, newDirection))
             return false;
 
         Debug.Log(string.Format("Spawning {0}", prefab.gameObject));
@@ -238,24 +247,29 @@ public class DPathGen : MonoBehaviour
         rotator.direction = (int)Mathf.Sign(newDirection);
     }
 
-    private bool willCollide(PathTile prefab)
+    private bool willCollide(PathTile prefab, float newDirectionAngle)
     {
         Vector3 ro = worldPos;
         Vector3 rd = direction;
         float rayLength = Vector3.Scale(prefab.size, rd).magnitude * 2.5f;
 
-        Vector3 ortho = Vector3.Cross(direction, Vector3.up) * prefab.size.x * 0.75f;
+        // Vector orthonormal to the direction and up vectors (right vector)
+        Vector3 right = Vector3.Cross(direction, Vector3.up);
+        right *= prefab.size.x * 0.75f;
 
-        Ray rayL = new Ray(ro - ortho, rd);
-        Ray rayC = new Ray(ro, rd);
-        Ray rayR = new Ray(ro + ortho, rd);
+        if (threeRayCollision(ro, rd, right, rayLength))
+            return true;
 
-        if (Physics.Raycast(rayL, rayLength))
-            return true;
-        if (Physics.Raycast(rayC, rayLength))
-            return true;
-        if (Physics.Raycast(rayR, rayLength))
-            return true;
+        // For paths that will modify the direction, check the new direction, too
+        if(newDirectionAngle != 0.0f)
+        {
+            Vector3 newDirection = Quaternion.AngleAxis(newDirectionAngle, Vector3.up) * direction;
+            right = Vector3.Cross(newDirection, Vector3.up);
+
+            // TODO: Bad constant, but that is the length of an S + an L
+            if (threeRayCollision(ro + direction * prefab.size.z, newDirection, right, 15.0f))
+                return true;
+        }
 
         return false;
 
@@ -280,6 +294,22 @@ public class DPathGen : MonoBehaviour
         }
         
         return false; */
+    }
+
+    private bool threeRayCollision(Vector3 ro, Vector3 rd, Vector3 rightOffset, float rayLength)
+    {
+        Ray rayL = new Ray(ro - rightOffset, rd);
+        Ray rayC = new Ray(ro, rd);
+        Ray rayR = new Ray(ro + rightOffset, rd);
+
+        if (Physics.Raycast(rayL, rayLength))
+            return true;
+        if (Physics.Raycast(rayC, rayLength))
+            return true;
+        if (Physics.Raycast(rayR, rayLength))
+            return true;
+
+        return false;
     }
 
     private void changeDirection(float angle)

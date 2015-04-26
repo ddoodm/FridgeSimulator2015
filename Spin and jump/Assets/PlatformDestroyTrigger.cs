@@ -33,7 +33,7 @@ public class PlatformDestroyTrigger : MonoBehaviour
         int cPlatformID = cPlatform == null ? -1 : cPlatform.GetInstanceID();
         int pPlatformID = pPlatform == null ? -1 : pPlatform.GetInstanceID();
 
-        if(cPlatformID != pPlatformID)
+        if(cPlatformID != pPlatformID && cPlatform != pPlatform)
         {
             if (pPlatform != null)
             {
