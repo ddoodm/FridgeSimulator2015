@@ -64,6 +64,8 @@ public class PlayerController : MonoBehaviour
     private GameController gameController;
 
     private Vector3 oldPosition;
+
+	public AudioSource jump, land, step, stepSlow;
 	
     void Start()
     {
@@ -87,6 +89,15 @@ public class PlayerController : MonoBehaviour
                 rigidbody.position += transform.forward * slowedSpeed;
         }
 
+		if (isInAir)
+			step.Play ();
+		
+		//if (onPlatform && isInAir)
+		//	land.Play ();
+		
+		if (!isSlowed)
+			stepSlow.Play ();
+
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
         // Add jump force
@@ -95,6 +106,7 @@ public class PlayerController : MonoBehaviour
             // Transform jump direction into the player's local space
             rigidbody.AddForce(transform.rotation * jumpForce);
             isInAir = true;
+			jump.Play();
 
 			if (wallJump) {
 				tempWallJump.y = rigidbody.position.y + 2.0f;
