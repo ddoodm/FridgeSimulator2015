@@ -65,6 +65,9 @@ public class DPathGen : MonoBehaviour
     private Stack<PathTile> tiles;
     PathType lastType = PathType.PATH_S;
 
+    public int maxBoringPaths = 3;
+    private int boringPathCount = 0;
+
     private PlayerController player;
 
     public void Start()
@@ -126,7 +129,10 @@ public class DPathGen : MonoBehaviour
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch(rand)
         {
-            case 0: return PathType.PATH_S;
+            case 0:
+                if (boringPathCount > maxBoringPaths)
+                    return newPathFrom_PathS(); // Try again
+                return PathType.PATH_S;
             case 1: return PathType.PATH_L;
             case 2: return PathType.PATH_R;
             case 3: return PathType.GAP;
@@ -171,7 +177,10 @@ public class DPathGen : MonoBehaviour
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch (rand)
         {
-            case 0: return PathType.PATH_S;
+            case 0:
+                if (boringPathCount > maxBoringPaths)
+                    return newPathFrom_Gap(); // Try again
+                return PathType.PATH_S;
             case 1: return PathType.PATH_L;
             case 2: return PathType.PATH_R;
             default: return PathType.PATH_S;
@@ -188,6 +197,7 @@ public class DPathGen : MonoBehaviour
         switch(type)
         {
             case PathType.PATH_S:
+                boringPathCount++;
                 return spawn(prefab_path_s, 0.0f);
             case PathType.PATH_L:
                 return spawn(prefab_path_l, -90.0f);
@@ -195,6 +205,7 @@ public class DPathGen : MonoBehaviour
                 return spawn(prefab_path_r, 90.0f);
             case PathType.SPINNER:
                 int attempts = 3;
+                boringPathCount = 0;
                 while (attempts --> 0)
                 {
                     float randomDirection = Random.Range(-1, 1) * 90.0f;
@@ -205,8 +216,10 @@ public class DPathGen : MonoBehaviour
             case PathType.GAP:
                 return spawn(prefab_gap, 0.0f);
             case PathType.WALL:
+                boringPathCount = 0;
                 return spawn(prefab_wall, 0.0f);
             case PathType.PATH_S_NOOBS:
+                boringPathCount++;
                 return spawn(prefab_path_s_noobs, 0.0f);
             default:
                 return false;
