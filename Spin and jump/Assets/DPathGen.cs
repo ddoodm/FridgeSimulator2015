@@ -41,7 +41,8 @@ public class DPathGen : MonoBehaviour
         prefab_path_l,
         prefab_path_r,
         prefab_spinner,
-        prefab_gap;
+        prefab_gap,
+        prefab_wall;
 
     /// <summary>
     /// The maximum distance, from the player, that new tiles will spawn
@@ -108,6 +109,7 @@ public class DPathGen : MonoBehaviour
             case PathType.PATH_R: nextType = newPathFrom_PathLR(); break;
             case PathType.SPINNER: nextType = newPathFrom_Spinner(); break;
             case PathType.GAP: nextType = newPathFrom_Gap(); break;
+            case PathType.WALL: nextType = newPathFrom_Wall(); break;
         }
 
         lastType = nextType;
@@ -117,7 +119,7 @@ public class DPathGen : MonoBehaviour
 
     private PathType newPathFrom_PathS()
     {
-        const int options = 5;
+        const int options = 6;
 
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch(rand)
@@ -127,6 +129,7 @@ public class DPathGen : MonoBehaviour
             case 2: return PathType.PATH_R;
             case 3: return PathType.GAP;
             case 4: return PathType.SPINNER;
+            case 5: return PathType.WALL;
             default: return PathType.PATH_S;
         }
     }
@@ -173,6 +176,11 @@ public class DPathGen : MonoBehaviour
         }
     }
 
+    private PathType newPathFrom_Wall()
+    {
+        return PathType.PATH_S;
+    }
+
     private bool spawnType(PathType type)
     {
         switch(type)
@@ -194,6 +202,8 @@ public class DPathGen : MonoBehaviour
                 return false;
             case PathType.GAP:
                 return spawn(prefab_gap, 0.0f);
+            case PathType.WALL:
+                return spawn(prefab_wall, 0.0f);
             default:
                 return false;
         }
@@ -227,7 +237,7 @@ public class DPathGen : MonoBehaviour
         switch(prefab.type)
         {
             // Straight paths add only the direction in which they travel
-            case PathType.PATH_S: case PathType.GAP:
+            case PathType.PATH_S: case PathType.GAP: case PathType.WALL:
                 worldPos += prefab.size.z * direction;
                 break;
 
