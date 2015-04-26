@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     public float
         moveSpeed = 0.1f,
         slowedSpeed = 0.025f;
+		
+	float speed;
 	
 	/// <summary>
 	/// position of the player before wallrunning.
@@ -81,22 +83,21 @@ public class PlayerController : MonoBehaviour
 	{
 
         // Parallel transform along the path (infinite force).
-        if (!isInAir)
-        {
-            if (!gameController.isGameOver && !isSlowed)
-                rigidbody.position += transform.forward * moveSpeed;
-            else
-                rigidbody.position += transform.forward * slowedSpeed;
-        }
+        if (!isInAir) {
+			if (!gameController.isGameOver && !isSlowed) 
+				rigidbody.position += transform.forward * moveSpeed;
+			else
+				rigidbody.position += transform.forward * slowedSpeed;
+		}
 
-		if (isInAir)
+		if (isInAir && !isSlowed)
 			step.Play ();
 		
 		//if (onPlatform && isInAir)
 		//	land.Play ();
 		
-		if (!isSlowed)
-			stepSlow.Play ();
+		//if (!isSlowed)
+		//	stepSlow.Play ();
 
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
