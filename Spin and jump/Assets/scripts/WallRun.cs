@@ -5,13 +5,12 @@ public class WallRun : MonoBehaviour {
 
 	private PlayerController player;
 	
-	
-	void OnTriggerEnter(Collider other)
+	void OnTriggerStay(Collider other)
 	{
 		if (other.tag == "Player") {
 			player = other.gameObject.GetComponent<PlayerController>();
 			player.wallJump = true;
-			Debug.Log("Can jump onto wallrun");
+            player.wallRef = gameObject;
 		}
 	}
 	
@@ -19,8 +18,11 @@ public class WallRun : MonoBehaviour {
 	void OnTriggerExit(Collider other) 
 	{
 		if (other.tag == "Player") {
+            player.wallRef = null;
 			Debug.Log ("Fallen from wallrun");
-			player.wallRunning = false;
+			player.wallJump = false;
+            player.wallRunning = false;
+            this.transform.parent.GetComponent<PlatformDropper>().drop();
 		}
 	} 
 }

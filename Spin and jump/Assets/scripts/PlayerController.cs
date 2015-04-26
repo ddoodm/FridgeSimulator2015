@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public bool wallJump { get; set; }
 	public bool wallRunning { get; set; }
+    public GameObject wallRef = null;
 
     public bool canTurn { get; set; }
 
@@ -67,6 +68,14 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 oldPosition;
 
+    /// <summary>
+    /// Amount of force to apply on the player's right axis.
+    /// 750 = 12.5N * 1/60  :   12.5N force in the first frame.
+    /// </summary>
+    public float pushAmount = 750.0f;
+    public bool pushAllowed = false;
+    private int alreadyPushedForID = -1;
+
 	public AudioSource jump, land, step, stepSlow;
 	
     void Start()
@@ -74,14 +83,8 @@ public class PlayerController : MonoBehaviour
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
     }
 
-    void Update()
-    {
-        Debug.DrawRay(this.transform.position, Vector3.down);
-    }
-
 	void LateUpdate()
 	{
-
         // Parallel transform along the path (infinite force).
         if (!isInAir) {
 			if (!gameController.isGameOver && !isSlowed) 
@@ -109,6 +112,10 @@ public class PlayerController : MonoBehaviour
             isInAir = true;
 			jump.Play();
 
+            if (wallJump)
+                wallRunning = true;
+
+            /*
 			if (wallJump) {
 				tempWallJump.y = rigidbody.position.y + 2.0f;
 				direction = -1;
@@ -148,9 +155,7 @@ public class PlayerController : MonoBehaviour
 				Debug.Log ("Wallrunning");
 				Debug.Log ("Direction = " + direction);
 			}
-
-
-
+            */
         }
 
 
@@ -170,6 +175,7 @@ public class PlayerController : MonoBehaviour
 		} */
 
 		//while wall running
+        /*
 		if (wallRunning) {
 			rigidbody.position += transform.forward * moveSpeed;
 			tempPos = rigidbody.position;
@@ -186,9 +192,9 @@ public class PlayerController : MonoBehaviour
 				tempPos.x = tempWallJump.x;
 			}
 
-
 			rigidbody.position = tempPos;
 		}
+         */
 
 		//rotates the player if it is on a spinning platform
         /*
@@ -197,8 +203,44 @@ public class PlayerController : MonoBehaviour
 			transform.Rotate (new Vector3 (0, 30, 0) * Time.deltaTime);
 		}*/
 
+        if (wallRunning)
+            handleWallJump();
+
+        // Player nudging
+        if (pushAllowed && !isInAir && currentPlatform != null && (alreadyPushedForID != currentPlatform.GetInstanceID()))
+        {
+            if (Input.GetKey(KeyCode.A))
+                pushPlayer(-pushAmount);
+            else if (Input.GetKey(KeyCode.D))
+                pushPlayer(pushAmount);
+        }
+
         oldPosition = rigidbody.position;
 	}
+
+    private void handleWallJump()
+    {
+        if (wallRef == null)
+            return;
+
+        // Tend towards the wall
+        Vector3 wallRight = wallRef.transform.parent.right;
+        wallRight = new Vector3(Mathf.Abs(wallRight.x), Mathf.Abs(wallRight.y), Mathf.Abs(wallRight.z));
+        Vector3 playerPos = this.transform.position;
+        Vector3 wallPos = wallRef.transform.position;
+        Vector3 distance = Vector3.Scale(wallPos - playerPos, wallRight);
+        this.rigidbody.position += distance * 5.0f * Time.deltaTime;
+
+        rigidbody.AddForce(transform.forward * 15.0f);
+        rigidbody.AddForce(Vector3.up * 10.0f);
+    }
+
+    private void pushPlayer(float pushAmount)
+    {
+        rigidbody.velocity += (transform.right * pushAmount * Time.deltaTime);
+        pushAllowed = false;
+        alreadyPushedForID = currentPlatform.GetInstanceID();
+    }
 
     void OnCollisionEnter(Collision other)
     {

@@ -7,7 +7,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum PathType { PATH_S, PATH_L, PATH_R, SPINNER, WALL, GAP };
+public enum PathType { PATH_S, PATH_L, PATH_R, SPINNER, WALL, GAP, PATH_S_NOOBS };
 
 [System.Serializable]
 public class PathTile
@@ -42,7 +42,8 @@ public class DPathGen : MonoBehaviour
         prefab_path_r,
         prefab_spinner,
         prefab_gap,
-        prefab_wall;
+        prefab_wall,
+        prefab_path_s_noobs;
 
     /// <summary>
     /// The maximum distance, from the player, that new tiles will spawn
@@ -77,7 +78,7 @@ public class DPathGen : MonoBehaviour
 
         // Spawn at least two S paths first
         for (int i = 0; i < 2; i++)
-            spawnType(PathType.PATH_S);
+            spawnType(PathType.PATH_S_NOOBS);
     }
 
     public void Update()
@@ -104,7 +105,8 @@ public class DPathGen : MonoBehaviour
 
         switch (lastType = tiles.Peek().type)
         {
-            case PathType.PATH_S: nextType = newPathFrom_PathS(); break;
+            case PathType.PATH_S:
+            case PathType.PATH_S_NOOBS: nextType = newPathFrom_PathS(); break;
             case PathType.PATH_L:
             case PathType.PATH_R: nextType = newPathFrom_PathLR(); break;
             case PathType.SPINNER: nextType = newPathFrom_Spinner(); break;
@@ -178,7 +180,7 @@ public class DPathGen : MonoBehaviour
 
     private PathType newPathFrom_Wall()
     {
-        return PathType.PATH_S;
+        return PathType.PATH_S_NOOBS;
     }
 
     private bool spawnType(PathType type)
@@ -204,6 +206,8 @@ public class DPathGen : MonoBehaviour
                 return spawn(prefab_gap, 0.0f);
             case PathType.WALL:
                 return spawn(prefab_wall, 0.0f);
+            case PathType.PATH_S_NOOBS:
+                return spawn(prefab_path_s_noobs, 0.0f);
             default:
                 return false;
         }
@@ -237,7 +241,7 @@ public class DPathGen : MonoBehaviour
         switch(prefab.type)
         {
             // Straight paths add only the direction in which they travel
-            case PathType.PATH_S: case PathType.GAP: case PathType.WALL:
+            case PathType.PATH_S: case PathType.PATH_S_NOOBS: case PathType.GAP: case PathType.WALL:
                 worldPos += prefab.size.z * direction;
                 break;
 
