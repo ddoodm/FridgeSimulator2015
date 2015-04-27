@@ -112,9 +112,6 @@ public class PlayerController : MonoBehaviour
             isInAir = true;
 			jump.Play();
 
-            if (wallJump)
-                wallRunning = true;
-
             /*
 			if (wallJump) {
 				tempWallJump.y = rigidbody.position.y + 2.0f;
@@ -203,7 +200,7 @@ public class PlayerController : MonoBehaviour
 			transform.Rotate (new Vector3 (0, 30, 0) * Time.deltaTime);
 		}*/
 
-        if (wallRunning)
+        if (wallRunning && isInAir)
             handleWallJump();
 
         // Player nudging

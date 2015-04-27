@@ -9,7 +9,7 @@ public class WallRun : MonoBehaviour {
 	{
 		if (other.tag == "Player") {
 			player = other.gameObject.GetComponent<PlayerController>();
-			player.wallJump = true;
+			player.wallRunning = true;
             player.wallRef = gameObject;
 		}
 	}
