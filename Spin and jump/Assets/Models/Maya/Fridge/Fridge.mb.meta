@@ -13,6 +13,18 @@ ModelImporter:
     100014: pCylinder2
     100016: pCylinder3
     100018: pPlane1
+    100020: Char_D_1
+    100022: Char_E_1
+    100024: Char_F_1
+    100026: Char_G_1
+    100028: Char_I_1
+    100030: Char_M_1
+    100032: Char_R_1
+    100034: Char_R_2
+    100036: Char_x_1
+    100038: Char_x_2
+    100040: Text_MxRxxFRIDGE_1
+    100042: Trim_Text_MxRxxFRIDGE_1_1
     400000: //RootNode
     400002: pCube1
     400004: pCylinder1
@@ -23,6 +35,18 @@ ModelImporter:
     400014: pCylinder2
     400016: pCylinder3
     400018: pPlane1
+    400020: Char_D_1
+    400022: Char_E_1
+    400024: Char_F_1
+    400026: Char_G_1
+    400028: Char_I_1
+    400030: Char_M_1
+    400032: Char_R_1
+    400034: Char_R_2
+    400036: Char_x_1
+    400038: Char_x_2
+    400040: Text_MxRxxFRIDGE_1
+    400042: Trim_Text_MxRxxFRIDGE_1_1
     2300000: pCube1
     2300002: pCylinder1
     2300004: pTorus1

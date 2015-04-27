@@ -89,6 +89,10 @@ public class PlayerTurner : MonoBehaviour
         if (rotateState.direction != Direction.NONE)
             return;
 
+        // NEW: Do not turn while the player can still be pushed
+        if (playerController.pushAllowed)
+            return;
+
         if (playerController.isInAir)
             return;
 

@@ -8,8 +8,16 @@ public class playerPusher : MonoBehaviour
         if (other.gameObject.tag != "Player")
             return;
 
-        other.GetComponent<PlayerController>().pushAllowed = true;
-        Debug.Log("PUSH ALLOWED for " + this.gameObject);
+        PlayerController player = other.GetComponent<PlayerController>();
+
+        // Do not allow pushing if the player can turn on a turn segment instead:
+        if (player.canTurn)
+        {
+            player.pushAllowed = false;
+            return;
+        }
+
+        player.pushAllowed = true;
     }
 
     void OnTriggerExit(Collider other)

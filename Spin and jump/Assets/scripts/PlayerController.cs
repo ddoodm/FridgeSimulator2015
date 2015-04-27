@@ -203,8 +203,14 @@ public class PlayerController : MonoBehaviour
         if (wallRunning && isInAir)
             handleWallJump();
 
-        // Player nudging
-        if (pushAllowed && !isInAir && currentPlatform != null && (alreadyPushedForID != currentPlatform.GetInstanceID()))
+        /* Player nudging
+         * CONDITIONS:
+         *  - Pushing must have been allowed by a 'pushAllowed' trigger
+         *  - Must not be in air (jumping)
+         *  - Must not be at a turn segment (new, fixes high velocity bug)
+         *  - This platform was not nudged upon before
+         */
+        if (pushAllowed && !isInAir && !canTurn && currentPlatform != null && (alreadyPushedForID != currentPlatform.GetInstanceID()))
         {
             if (Input.GetKey(KeyCode.A))
                 pushPlayer(-pushAmount);
