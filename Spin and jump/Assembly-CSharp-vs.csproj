@@ -50,11 +50,13 @@
      <Compile Include="Assets\Boundary.cs" />
      <Compile Include="Assets\DPathGen.cs" />
      <Compile Include="Assets\KillOnContact.cs" />
+     <Compile Include="Assets\MainMenuController.cs" />
      <Compile Include="Assets\ObstableGen.cs" />
      <Compile Include="Assets\PlatformDestroyTrigger.cs" />
      <Compile Include="Assets\PlatformDropper.cs" />
      <Compile Include="Assets\RotateSlowPlayer.cs" />
      <Compile Include="Assets\RotateWithObject.cs" />
+     <Compile Include="Assets\SinBouncer.cs" />
      <Compile Include="Assets\TurnTrigger.cs" />
      <Compile Include="Assets\fakePlayer.cs" />
      <Compile Include="Assets\playerPusher.cs" />
@@ -63,6 +65,7 @@
      <Compile Include="Assets\progenR.cs" />
      <Compile Include="Assets\progrenW.cs" />
      <Compile Include="Assets\scripts\CameraController.cs" />
+     <Compile Include="Assets\scripts\Fader.cs" />
      <Compile Include="Assets\scripts\GameController.cs" />
      <Compile Include="Assets\scripts\GameOverByPlane.cs" />
      <Compile Include="Assets\scripts\JumpToPlatform.cs" />
@@ -74,6 +77,7 @@
      <Compile Include="Assets\scripts\WallRun.cs" />
      <Compile Include="Assets\scripts\endGame.cs" />
      <Compile Include="Assets\scripts\mover.cs" />
+     <None Include="Assets\Shaders\SinusWave.shader" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
