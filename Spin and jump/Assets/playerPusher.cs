@@ -3,21 +3,15 @@ using System.Collections;
 
 public class playerPusher : MonoBehaviour
 {
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag != "Player")
             return;
 
         PlayerController player = other.GetComponent<PlayerController>();
 
-        // Do not allow pushing if the player can turn on a turn segment instead:
-        if (player.canTurn)
-        {
-            player.pushAllowed = false;
-            return;
-        }
-
-        player.pushAllowed = true;
+        //player.pushAllowed = true;
+        player.overlappingPushZones++;
     }
 
     void OnTriggerExit(Collider other)
@@ -25,7 +19,8 @@ public class playerPusher : MonoBehaviour
         if (other.gameObject.tag != "Player")
             return;
 
-        other.GetComponent<PlayerController>().pushAllowed = false;
+        other.GetComponent<PlayerController>().overlappingPushZones--;
+
         Debug.Log("PUSH DISABLED for " + this.gameObject);
     }
 }

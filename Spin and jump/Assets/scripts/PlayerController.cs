@@ -74,7 +74,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public float pushAmount = 750.0f;
     public bool pushAllowed = false;
-    private int alreadyPushedForID = -1;
+    public int overlappingPushZones = 0;
+    public int alreadyPushedForID = -1;
 
 	public AudioSource jump, land, step, stepSlow;
 	
@@ -95,15 +96,10 @@ public class PlayerController : MonoBehaviour
 
 		if (isInAir && !isSlowed)
 			step.Play ();
-		
-		//if (onPlatform && isInAir)
-		//	land.Play ();
-		
-		//if (!isSlowed)
-		//	stepSlow.Play ();
 
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
+
         // Add jump force
         if (Input.GetButton("Jump") && !isInAir)
         {
@@ -111,94 +107,7 @@ public class PlayerController : MonoBehaviour
             rigidbody.AddForce(transform.rotation * jumpForce);
             isInAir = true;
 			jump.Play();
-
-            /*
-			if (wallJump) {
-				tempWallJump.y = rigidbody.position.y + 2.0f;
-				direction = -1;
-
-				if (Mathf.Abs (rigidbody.velocity.normalized.x) > Mathf.Abs (rigidbody.velocity.normalized.z))
-				{
-					if (rigidbody.velocity.normalized.x > 0) 
-					{
-						tempWallJump.z = rigidbody.position.z + 2.0f;
-						direction = 0;
-					} 
-					else if (rigidbody.velocity.normalized.x < 0) 
-					{
-						tempWallJump.z = rigidbody.position.z - 2.0f;
-						direction = 0;
-					}
-				}
-
-
-				if (Mathf.Abs (rigidbody.velocity.normalized.z) > Mathf.Abs(rigidbody.velocity.normalized.x))
-				{
-					if (rigidbody.velocity.normalized.z > 0) 
-					{
-						tempWallJump.x = rigidbody.position.x - 2.0f;
-						direction = 1;
-					} 
-					else if (rigidbody.velocity.normalized.z < 0) 
-					{
-						tempWallJump.x = rigidbody.position.x + 2.0f;
-						direction = 1;
-					}
-				}
-
-
-				wallRunning = true;
-				wallJump = false;
-				Debug.Log ("Wallrunning");
-				Debug.Log ("Direction = " + direction);
-			}
-            */
         }
-
-
-		//allow wall running
-		/*if (Input.GetButtonDown ("Jump") && wallJump) {
-			tempWallJump.x = rigidbody.position.x + 2.0f;
-			tempWallJump.y = rigidbody.position.y + 2.0f;
-			tempWallJump.z = rigidbody.position.z + 2.0f;
-
-			if (!isInAir){
-				wallRunning = true;
-			}
-			wallRunning = true;
-			wallJump = false;
-			Debug.Log ("Wallrunning");
-
-		} */
-
-		//while wall running
-        /*
-		if (wallRunning) {
-			rigidbody.position += transform.forward * moveSpeed;
-			tempPos = rigidbody.position;
-			tempPos.y = tempWallJump.y;
-
-			//add flag for whether player is travelling along x or z axis
-
-			if (direction == 0)
-			{
-				tempPos.z = tempWallJump.z;
-			}
-			if (direction == 1)
-			{
-				tempPos.x = tempWallJump.x;
-			}
-
-			rigidbody.position = tempPos;
-		}
-         */
-
-		//rotates the player if it is on a spinning platform
-        /*
-		if (onPlatform) 
-		{
-			transform.Rotate (new Vector3 (0, 30, 0) * Time.deltaTime);
-		}*/
 
         if (wallRunning && isInAir)
             handleWallJump();
@@ -210,13 +119,14 @@ public class PlayerController : MonoBehaviour
          *  - Must not be at a turn segment (new, fixes high velocity bug)
          *  - This platform was not nudged upon before
          */
+        /*
         if (pushAllowed && !isInAir && !canTurn && currentPlatform != null && (alreadyPushedForID != currentPlatform.GetInstanceID()))
         {
             if (Input.GetKey(KeyCode.A))
                 pushPlayer(-pushAmount);
             else if (Input.GetKey(KeyCode.D))
                 pushPlayer(pushAmount);
-        }
+        }*/
 
         oldPosition = rigidbody.position;
 	}
@@ -236,13 +146,6 @@ public class PlayerController : MonoBehaviour
 
         rigidbody.AddForce(transform.forward * 15.0f);
         rigidbody.AddForce(Vector3.up * 10.0f);
-    }
-
-    private void pushPlayer(float pushAmount)
-    {
-        rigidbody.velocity += (transform.right * pushAmount * Time.deltaTime);
-        pushAllowed = false;
-        alreadyPushedForID = currentPlatform.GetInstanceID();
     }
 
     void OnCollisionEnter(Collision other)
