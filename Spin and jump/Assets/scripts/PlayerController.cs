@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
         slowedSpeed = 0.025f;
 		
 	float speed;
+
+    public bool paused;
 	
 	/// <summary>
 	/// position of the player before wallrunning.
@@ -101,7 +103,7 @@ public class PlayerController : MonoBehaviour
         rigidbody.AddForce(Vector3.down * gravityForce);
 
         // Add jump force
-        if (Input.GetButton("Jump") && !isInAir)
+        if (Input.GetButton("Jump") && !isInAir && paused == false)
         {
             // Transform jump direction into the player's local space
             rigidbody.AddForce(transform.rotation * jumpForce);
@@ -120,7 +122,7 @@ public class PlayerController : MonoBehaviour
          *  - This platform was not nudged upon before
          */
         /*
-        if (pushAllowed && !isInAir && !canTurn && currentPlatform != null && (alreadyPushedForID != currentPlatform.GetInstanceID()))
+        if (pushAllowed && !isInAir && !canTurn && currentPlatform != null && (alreadyPushedForID != currentPlatform.GetInstanceID()) && !paused)
         {
             if (Input.GetKey(KeyCode.A))
                 pushPlayer(-pushAmount);
@@ -129,7 +131,44 @@ public class PlayerController : MonoBehaviour
         }*/
 
         oldPosition = rigidbody.position;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (paused)
+            {
+                paused = false;
+            }
+            else
+            {
+                paused = true;
+            }
+        }
+
+        if (paused)
+        {
+            moveSpeed = 0;
+            
+        }
+        else
+        {
+            moveSpeed = 0.1f;
+            
+        }
 	}
+
+    void OnGUI()
+    {
+        if (paused)
+        {
+           
+            if (GUI.Button(new Rect(Screen.width / 2, Screen.height / 2, 150, 25), "Resume Playing"))
+            {
+                paused = false;
+                
+            }
+        }
+    }
+	
 
     private void handleWallJump()
     {
