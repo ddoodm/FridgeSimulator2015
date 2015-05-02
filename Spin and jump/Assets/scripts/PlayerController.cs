@@ -86,19 +86,8 @@ public class PlayerController : MonoBehaviour
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
     }
 
-	void LateUpdate()
-	{
-        // Parallel transform along the path (infinite force).
-        if (!isInAir) {
-			if (!gameController.isGameOver && !isSlowed) 
-				rigidbody.position += transform.forward * moveSpeed;
-			else
-				rigidbody.position += transform.forward * slowedSpeed;
-		}
-
-		if (isInAir && !isSlowed)
-			step.Play ();
-
+    void LateUpdate()
+    {
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
 
@@ -108,8 +97,18 @@ public class PlayerController : MonoBehaviour
             // Transform jump direction into the player's local space
             rigidbody.AddForce(transform.rotation * jumpForce);
             isInAir = true;
-			jump.Play();
+            jump.Play();
         }
+    }
+
+	void Update()
+	{
+        // Parallel transform along the path (infinite force).
+        if (!isInAir)
+            transform.position += velocity;
+
+		if (isInAir && !isSlowed)
+			step.Play ();
 
         if (wallRunning && isInAir)
             handleWallJump();
@@ -130,19 +129,10 @@ public class PlayerController : MonoBehaviour
                 pushPlayer(pushAmount);
         }*/
 
-        oldPosition = rigidbody.position;
+        oldPosition = transform.position;
 
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (paused)
-            {
-                paused = false;
-            }
-            else
-            {
-                paused = true;
-            }
-        }
+            paused = !paused;
 
         if (paused)
         {
@@ -209,6 +199,17 @@ public class PlayerController : MonoBehaviour
     public void stopSlow()
     {
         this.isSlowed = false;
+    }
+
+    public Vector3 velocity
+    {
+        get
+        {
+            if (!gameController.isGameOver && !isSlowed)
+                return transform.forward * moveSpeed;
+            else
+                return transform.forward * slowedSpeed;
+        }
     }
 
     public float velocityMagnitude

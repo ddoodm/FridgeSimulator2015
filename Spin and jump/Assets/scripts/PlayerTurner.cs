@@ -42,7 +42,7 @@ public class PlayerTurner : MonoBehaviour
         playerController = GetComponent<PlayerController>();
     }
 
-    void LateUpdate()
+    void Update()
     {
         getRotationRequest();
 

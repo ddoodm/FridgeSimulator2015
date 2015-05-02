@@ -46,7 +46,7 @@ public class BiasPosition : MonoBehaviour
         return laneWidth * (float)lane;
     }
 
-	void LateUpdate ()
+	void Update ()
     {
         // We're alowed to push if we're in at least one push zone (path)
         playerController.pushAllowed = playerController.overlappingPushZones > 0;

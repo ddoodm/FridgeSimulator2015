@@ -3,7 +3,9 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour 
 {
-	public GameObject player;
+	public PlayerController player;
+    public float butter = 0.1f;
+
 	private Vector3 offset;
     private Vector3 offsetRot;
 
@@ -27,14 +29,22 @@ public class CameraController : MonoBehaviour
 
         transform.rotation = Quaternion.identity;
 
-        transform.position = player.transform.position;
-        transform.RotateAround(player.transform.position, player.transform.up, player.transform.rotation.eulerAngles.y);
-        transform.Translate(offset);
+        Vector3 target = player.transform.position + player.velocity;
+        Vector3 dampPlayerPos = (transform.position - target) * butter * Time.deltaTime;
+
+        //transform.position -= dampPlayerPos;
+        //transform.Rotate(Vector3.up, player.transform.rotation.eulerAngles.y);
+        transform.Translate(-dampPlayerPos);
+        transform.Rotate(player.transform.up, player.transform.rotation.eulerAngles.y);
+        transform.Translate(offset * butter * Time.deltaTime);
+        transform.LookAt(player.rigidbody.position + Vector3.up * 2.0f);
+        //transform.RotateAround(player.transform.position, player.transform.up, Time.time*4.0f);
+        //transform.Translate(offset);
 
         transform.Rotate(offsetRot);
 
         // Lock Y transformation
-        Vector3 yLock = new Vector3(1.0f, 0.0f, 1.0f);
-        transform.position = Vector3.Scale(transform.position, yLock) + Vector3.Scale(offset, Vector3.up);
+        //Vector3 yLock = new Vector3(1.0f, 0.0f, 1.0f);
+        //transform.position = Vector3.Scale(transform.position, yLock) + Vector3.Scale(offset, Vector3.up);
 	}
 }
