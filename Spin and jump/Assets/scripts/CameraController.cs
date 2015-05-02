@@ -37,7 +37,7 @@ public class CameraController : MonoBehaviour
         transform.Translate(-dampPlayerPos);
         transform.Rotate(player.transform.up, player.transform.rotation.eulerAngles.y);
         transform.Translate(offset * butter * Time.deltaTime);
-        transform.LookAt(player.rigidbody.position + Vector3.up * 2.0f);
+        transform.LookAt(player.transform.position + Vector3.up * 2.0f);
         //transform.RotateAround(player.transform.position, player.transform.up, Time.time*4.0f);
         //transform.Translate(offset);
 
