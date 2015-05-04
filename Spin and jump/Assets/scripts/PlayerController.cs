@@ -86,6 +86,9 @@ public class PlayerController : MonoBehaviour
         gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
     }
 
+    /// <summary>
+    /// Handle rigidbody manipulation here
+    /// </summary>
     void LateUpdate()
     {
         // Add gravity force
@@ -99,8 +102,14 @@ public class PlayerController : MonoBehaviour
             isInAir = true;
             jump.Play();
         }
+
+        if (wallRunning && isInAir)
+            handleWallJump_Late();
     }
 
+    /// <summary>
+    /// Handle logic and transform manipulation / reading here
+    /// </summary>
 	void Update()
 	{
         // Parallel transform along the path (infinite force).
@@ -112,22 +121,6 @@ public class PlayerController : MonoBehaviour
 
         if (wallRunning && isInAir)
             handleWallJump();
-
-        /* Player nudging
-         * CONDITIONS:
-         *  - Pushing must have been allowed by a 'pushAllowed' trigger
-         *  - Must not be in air (jumping)
-         *  - Must not be at a turn segment (new, fixes high velocity bug)
-         *  - This platform was not nudged upon before
-         */
-        /*
-        if (pushAllowed && !isInAir && !canTurn && currentPlatform != null && (alreadyPushedForID != currentPlatform.GetInstanceID()) && !paused)
-        {
-            if (Input.GetKey(KeyCode.A))
-                pushPlayer(-pushAmount);
-            else if (Input.GetKey(KeyCode.D))
-                pushPlayer(pushAmount);
-        }*/
 
         oldPosition = transform.position;
 
@@ -159,6 +152,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 	
+    private void handleWallJump_Late()
+    {
+        // TODO: Give these inspector variables
+        rigidbody.AddForce(transform.forward * 15.0f);
+        rigidbody.AddForce(Vector3.up * 10.0f);
+    }
 
     private void handleWallJump()
     {
@@ -172,9 +171,6 @@ public class PlayerController : MonoBehaviour
         Vector3 wallPos = wallRef.transform.position;
         Vector3 distance = Vector3.Scale(wallPos - playerPos, wallRight);
         this.rigidbody.position += distance * 5.0f * Time.deltaTime;
-
-        rigidbody.AddForce(transform.forward * 15.0f);
-        rigidbody.AddForce(Vector3.up * 10.0f);
     }
 
     void OnCollisionEnter(Collision other)

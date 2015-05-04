@@ -13,6 +13,7 @@ public enum PathType { PATH_S, PATH_L, PATH_R, SPINNER, WALL, GAP, PATH_S_NOOBS 
 public class PathTile
 {
     public GameObject gameObject;
+    public GameObject instance;
     public PathType type;
 
     public PathTile(GameObject gameObject, PathType type)
@@ -241,6 +242,7 @@ public class DPathGen : MonoBehaviour
         Debug.Log(string.Format("Spawning {0}", prefab.gameObject));
 
         GameObject instance = Instantiate(prefab.gameObject, worldPos, Quaternion.LookRotation(direction)) as GameObject;
+        prefab.instance = instance;
 
         // Handle spinner direction
         if (prefab.type == PathType.SPINNER)
@@ -284,8 +286,9 @@ public class DPathGen : MonoBehaviour
         Vector3 right = Vector3.Cross(direction, Vector3.up);
         right *= prefab.size.x * 0.75f;
 
-        if (threeRayCollision(ro, rd, right, rayLength))
-            return true;
+        RaycastHit? frontHit;
+        if ((frontHit = threeRayCollision(ro, rd, right, rayLength)).HasValue)
+            return willCollideAfterPanic(frontHit.Value);
 
         // For paths that will modify the direction, check the new direction, too
         if(newDirectionAngle != 0.0f)
@@ -294,8 +297,9 @@ public class DPathGen : MonoBehaviour
             right = Vector3.Cross(newDirection, Vector3.up);
 
             // TODO: Bad constant, but that is the length of an S + an L
-            if (threeRayCollision(ro + direction * prefab.size.z, newDirection, right, 15.0f))
-                return true;
+            RaycastHit? sideHit;
+            if ((sideHit = threeRayCollision(ro + direction * prefab.size.z, newDirection, right, 15.0f)).HasValue)
+                return willCollideAfterPanic(sideHit.Value);
         }
 
         return false;
@@ -323,20 +327,46 @@ public class DPathGen : MonoBehaviour
         return false; */
     }
 
-    private bool threeRayCollision(Vector3 ro, Vector3 rd, Vector3 rightOffset, float rayLength)
+    /// <summary>
+    /// Check whether we need to panic, and if so, remove the obstructing object.
+    /// If the function removes the obstruct, it returns 'false', as in 'there is no longer a collision'.
+    /// Otherwise, there is still a collision.
+    /// </summary>
+    private bool willCollideAfterPanic(RaycastHit hit)
+    {
+        // Check whether the player is within panic range
+        //if((player.transform.position - worldPos).magnitude < panicDistance)
+        if(player.objectUnderPlayer == tiles.Peek().instance)
+        {
+            // Get the root parent GameObject for the one that is causing the collision
+            GameObject hitRoot = hit.collider.gameObject.transform.root.gameObject;
+
+            Debug.Log("PATH GENERATOR PANIC ==== On platform: " + player.currentPlatform + ", Last platform: " + tiles.Peek().instance + ", Destroying platform: " + hitRoot);
+
+            // If so, destroy the obstruction, and allow the generator to continue on this frame
+            Destroy(hitRoot);
+            return false;
+        }
+
+        return true;
+    }
+
+    private RaycastHit? threeRayCollision(Vector3 ro, Vector3 rd, Vector3 rightOffset, float rayLength)
     {
         Ray rayL = new Ray(ro - rightOffset, rd);
         Ray rayC = new Ray(ro, rd);
         Ray rayR = new Ray(ro + rightOffset, rd);
 
-        if (Physics.Raycast(rayL, rayLength))
-            return true;
-        if (Physics.Raycast(rayC, rayLength))
-            return true;
-        if (Physics.Raycast(rayR, rayLength))
-            return true;
+        RaycastHit outHit;
 
-        return false;
+        if (Physics.Raycast(rayL, out outHit, rayLength))
+            return outHit;
+        if (Physics.Raycast(rayC, out outHit, rayLength))
+            return outHit;
+        if (Physics.Raycast(rayR, out outHit, rayLength))
+            return outHit;
+
+        return null;
     }
 
     private void changeDirection(float angle)
