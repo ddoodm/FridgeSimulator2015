@@ -15,8 +15,9 @@ public class PlayerController : MonoBehaviour
     /// (Temp.)
     /// </summary>
     public float
-        moveSpeed = 0.1f,
-        slowedSpeed = 0.025f;
+        moveSpeed,
+        slowedSpeed = 0.025f,
+        tempSpeed;
 		
 	float speed;
 
@@ -127,6 +128,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
             paused = !paused;
 
+        
+
+        if (moveSpeed > 0)
+            tempSpeed = moveSpeed;
+
         if (paused)
         {
             moveSpeed = 0;
@@ -134,7 +140,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            moveSpeed = 0.1f;
+            moveSpeed = tempSpeed;
             
         }
 	}

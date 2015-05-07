@@ -165,8 +165,8 @@ public class DPathGen : MonoBehaviour
         switch (rand)
         {
             case 0: return PathType.PATH_S;
-            case 1: return PathType.PATH_L;
-            case 2: return PathType.PATH_R;
+            //case 1: return PathType.PATH_L;
+            //case 2: return PathType.PATH_R;
             default: return PathType.PATH_S;
         }
     }

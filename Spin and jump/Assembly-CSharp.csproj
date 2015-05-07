@@ -49,6 +49,7 @@
      <Compile Include="Assets\BiasPosition.cs" />
      <Compile Include="Assets\Boundary.cs" />
      <Compile Include="Assets\DPathGen.cs" />
+     <Compile Include="Assets\HighscoreGetter.cs" />
      <Compile Include="Assets\KillOnContact.cs" />
      <Compile Include="Assets\MainMenuController.cs" />
      <Compile Include="Assets\ObstableGen.cs" />
@@ -56,6 +57,7 @@
      <Compile Include="Assets\PlatformDropper.cs" />
      <Compile Include="Assets\RotateSlowPlayer.cs" />
      <Compile Include="Assets\RotateWithObject.cs" />
+     <Compile Include="Assets\ScorePoster.cs" />
      <Compile Include="Assets\SinBouncer.cs" />
      <Compile Include="Assets\TurnTrigger.cs" />
      <Compile Include="Assets\fakePlayer.cs" />
@@ -68,6 +70,7 @@
      <Compile Include="Assets\scripts\Fader.cs" />
      <Compile Include="Assets\scripts\GameController.cs" />
      <Compile Include="Assets\scripts\GameOverByPlane.cs" />
+     <Compile Include="Assets\scripts\HUDFPS.cs" />
      <Compile Include="Assets\scripts\JumpToPlatform.cs" />
      <Compile Include="Assets\scripts\PlayerController.cs" />
      <Compile Include="Assets\scripts\PlayerTurner.cs" />

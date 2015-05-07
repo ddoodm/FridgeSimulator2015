@@ -18,14 +18,25 @@ public class GameController : MonoBehaviour
     /// </summary>
     public float scoreDelta = 0.25f;
 
+    public Canvas uiCanvas;
+
 	private bool gameOver = false;
-	private float score = 0;
+	public float score = 0;
+
+    public float
+        checkpointIncrement = 200.0f,
+        speedCap = 0.2f,
+        speedDelta = 0.01f;
+
+    public float gameStartTime, gameDuration;
 
 	void Start()
 	{
 		restartText.text = "";
 		gameOverText.text = "";
 		updateScore ();
+
+        gameStartTime = Time.time;
 	}
 
 	public void AddScore(float newScoreValue)
@@ -44,6 +55,8 @@ public class GameController : MonoBehaviour
 		gameOverText.text = "GAME OVER";
 		gameOver = true;
 		restartText.text = "Press R to Restart";
+
+        uiCanvas.gameObject.SetActive(true);
 	}
 
     public bool isGameOver
@@ -70,9 +83,20 @@ public class GameController : MonoBehaviour
             // New velocity-based scoring
             float dist = player.velocityMagnitude * scoreDelta;
 			AddScore (dist);
+
+            // Update the game duration time
+            gameDuration = Time.time - gameStartTime;
 		}
 
 		if (gameOver && Input.GetKeyDown (KeyCode.R))
 			Application.LoadLevel (Application.loadedLevel);
+
+        if (((int)score % (int)checkpointIncrement) == 0 && score >= 1.0f && (player.moveSpeed < speedCap))
+        {
+            player.moveSpeed += speedDelta;
+            Debug.Log("Speed Increased AT " + checkpointIncrement + " TO " + player.moveSpeed);
+
+            checkpointIncrement += checkpointIncrement * 0.5f;
+        }
 	}
 }
