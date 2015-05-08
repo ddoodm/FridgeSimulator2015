@@ -25,7 +25,8 @@ public class UserScoreGetter : MonoBehaviour
 
     public Text
         scoreText,
-        timeText;
+        timeText,
+        titleText;
 
     private string playerName;
 
@@ -106,5 +107,7 @@ public class UserScoreGetter : MonoBehaviour
             scoreText.text += score.score.ToString() + "\n";
             timeText.text += score.time.ToString() + "\n";
         }
+
+        titleText.text = String.Format("Top Scores for {0}", playerName);
     }
 }
