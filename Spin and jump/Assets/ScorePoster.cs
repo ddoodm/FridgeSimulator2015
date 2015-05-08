@@ -9,8 +9,10 @@ public class ScorePoster : MonoBehaviour
     public HighscoreGetter scoreGetter;
     public Text successText;
     public Text failText;
+    public Button submitButton;
     private GameController gameController;
     private string username = "";
+    private bool scoreSubmitted = false;
 
     void Start()
     {
@@ -26,6 +28,9 @@ public class ScorePoster : MonoBehaviour
 
     public void postScore()
     {
+        if (scoreSubmitted)
+            return;
+
         int score = (int)gameController.score;
         int time = (int)gameController.gameDuration;
 
@@ -55,6 +60,8 @@ public class ScorePoster : MonoBehaviour
 
         Debug.Log("Score Poster - Posted new score to the server.");
         successText.gameObject.SetActive(true);
+        submitButton.enabled = false;
+        scoreSubmitted = true;
 
         // Update highscore list
         StartCoroutine(scoreGetter.refreshScores());
