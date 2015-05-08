@@ -98,4 +98,9 @@ public class GameController : MonoBehaviour
     {
         Application.LoadLevel(Application.loadedLevel);
     }
+
+    public void mainMenu()
+    {
+        Application.LoadLevel(0);
+    }
 }
