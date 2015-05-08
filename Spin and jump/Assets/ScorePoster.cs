@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 public class ScorePoster : MonoBehaviour
 {
     public string serverURI = "http://ddoodm.com/UnityProjects/SpinAndJumpSim/ScoreServ/postScore.php";
+    public HighscoreGetter scoreGetter;
+    public Text successText;
+    public Text failText;
     private GameController gameController;
     private string username = "";
 
@@ -14,7 +19,9 @@ public class ScorePoster : MonoBehaviour
 
     public void setUsername(string value)
     {
-        this.username = value;
+        // Strip all but alphanumeric
+        Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+        this.username = rgx.Replace(value, "");
     }
 
     public void postScore()
@@ -25,8 +32,11 @@ public class ScorePoster : MonoBehaviour
         if (username.Length == 0)
         {
             Debug.Log("Score Poster - No username");
+            failText.gameObject.SetActive(true);
             return;
         }
+
+        failText.gameObject.SetActive(false);
 
         StartCoroutine(postInBackground(score, username, time));
     }
@@ -44,5 +54,9 @@ public class ScorePoster : MonoBehaviour
         yield return www;
 
         Debug.Log("Score Poster - Posted new score to the server.");
+        successText.gameObject.SetActive(true);
+
+        // Update highscore list
+        StartCoroutine(scoreGetter.refreshScores());
     }
 }

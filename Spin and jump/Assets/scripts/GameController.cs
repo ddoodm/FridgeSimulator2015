@@ -52,10 +52,7 @@ public class GameController : MonoBehaviour
 
 	public void GameOver()
 	{
-		gameOverText.text = "GAME OVER";
 		gameOver = true;
-		restartText.text = "Press R to Restart";
-
         uiCanvas.gameObject.SetActive(true);
 	}
 
@@ -88,9 +85,6 @@ public class GameController : MonoBehaviour
             gameDuration = Time.time - gameStartTime;
 		}
 
-		if (gameOver && Input.GetKeyDown (KeyCode.R))
-			Application.LoadLevel (Application.loadedLevel);
-
         if (((int)score % (int)checkpointIncrement) == 0 && score >= 1.0f && (player.moveSpeed < speedCap))
         {
             player.moveSpeed += speedDelta;
@@ -99,4 +93,9 @@ public class GameController : MonoBehaviour
             checkpointIncrement += checkpointIncrement * 0.5f;
         }
 	}
+
+    public void restartGame()
+    {
+        Application.LoadLevel(Application.loadedLevel);
+    }
 }
