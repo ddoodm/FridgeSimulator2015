@@ -17,6 +17,7 @@ public class HighscoreGetter : MonoBehaviour
 {
     public string getHighscoreURI = "http://ddoodm.com/UnityProjects/SpinAndJumpSim/ScoreServ/highscores.php";
     public float colWidth = 128.0f;
+    public int limit = 10;
 
     public Score[] scores;
 
@@ -38,7 +39,8 @@ public class HighscoreGetter : MonoBehaviour
     public IEnumerator refreshScores()
     {
         // Wait until the document has been returned
-        WWW www = new WWW(getHighscoreURI);
+        string uriGet = getHighscoreURI + string.Format("?lim={0}", limit);
+        WWW www = new WWW(uriGet);
         yield return www;
 
         // Split HTML rows into an array

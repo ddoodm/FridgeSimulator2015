@@ -60,6 +60,7 @@
      <Compile Include="Assets\ScorePoster.cs" />
      <Compile Include="Assets\SinBouncer.cs" />
      <Compile Include="Assets\TurnTrigger.cs" />
+     <Compile Include="Assets\UserScoreGetter.cs" />
      <Compile Include="Assets\fakePlayer.cs" />
      <Compile Include="Assets\playerPusher.cs" />
      <Compile Include="Assets\progen.cs" />
