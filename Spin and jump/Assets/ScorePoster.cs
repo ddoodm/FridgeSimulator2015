@@ -10,7 +10,6 @@ public class ScorePoster : MonoBehaviour
     public Text successText;
     public Text failText;
     public Button submitButton;
-    public UserScoreGetter userScoreGetter;
     private GameController gameController;
     private string username = "";
     private bool scoreSubmitted = false;
@@ -45,9 +44,6 @@ public class ScorePoster : MonoBehaviour
         failText.gameObject.SetActive(false);
 
         StartCoroutine(postInBackground(score, username, time));
-
-        // Update the user's name
-        userScoreGetter.updatePlayerName(username);
     }
 
     private IEnumerator postInBackground(int score, string username, int time)
