@@ -160,6 +160,10 @@ public class PlayerController : MonoBehaviour
 	
     private void handleWallJump_Late()
     {
+        // NEW: Hold jump to wallride
+        if (!Input.GetButton("Jump"))
+            return;
+
         // TODO: Give these inspector variables
         rigidbody.AddForce(transform.forward * 15.0f);
         rigidbody.AddForce(Vector3.up * 10.0f);
@@ -168,6 +172,10 @@ public class PlayerController : MonoBehaviour
     private void handleWallJump()
     {
         if (wallRef == null)
+            return;
+
+        // NEW: Hold jump to wallride
+        if (!Input.GetButton("Jump"))
             return;
 
         // Tend towards the wall
