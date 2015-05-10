@@ -30,6 +30,16 @@ public class PathTile
             return collider.size;
         }
     }
+
+	public Vector3 scale
+	{
+		get
+		{
+			Transform collider = gameObject.GetComponent<Transform>();
+			return collider.localScale;
+		}
+	}
+
 }
 
 public class DPathGen : MonoBehaviour
@@ -257,7 +267,7 @@ public class DPathGen : MonoBehaviour
         {
             // Straight paths add only the direction in which they travel
             case PathType.PATH_S: case PathType.PATH_S_NOOBS: case PathType.GAP: case PathType.WALL:
-                worldPos += prefab.size.z * direction;
+                worldPos += prefab.size.z * prefab.scale.z * direction;
                 break;
 
             case PathType.PATH_L: case PathType.PATH_R: case PathType.SPINNER:
