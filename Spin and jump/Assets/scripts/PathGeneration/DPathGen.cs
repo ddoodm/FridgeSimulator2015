@@ -35,11 +35,9 @@ public class PathTile
 	{
 		get
 		{
-			Transform collider = gameObject.GetComponent<Transform>();
-			return collider.localScale;
+            return gameObject.transform.localScale;
 		}
 	}
-
 }
 
 public class DPathGen : MonoBehaviour
