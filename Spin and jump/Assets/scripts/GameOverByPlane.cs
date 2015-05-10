@@ -13,7 +13,7 @@ public class GameOverByPlane : MonoBehaviour
     void Update()
     {
         // Destroy if the object intersects the plane
-        if (this.transform.position.y < distance)
+        if (this.transform.position.y < distance && !gameController.isGameOver)
             gameController.GameOver();
     }
 }

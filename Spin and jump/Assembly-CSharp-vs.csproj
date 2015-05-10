@@ -73,6 +73,7 @@
      <Compile Include="Assets\scripts\ShadowText.cs" />
      <Compile Include="Assets\scripts\SinBouncer.cs" />
      <Compile Include="Assets\scripts\UI\Fader.cs" />
+     <Compile Include="Assets\scripts\UI\Flasher.cs" />
      <Compile Include="Assets\scripts\UI\MainMenuController.cs" />
      <Compile Include="Assets\scripts\UI\activeOnPause.cs" />
      <Compile Include="Assets\scripts\_OldPathGenerator\fakePlayer.cs" />
