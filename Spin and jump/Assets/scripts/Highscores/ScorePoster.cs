@@ -58,6 +58,14 @@ public class ScorePoster : MonoBehaviour
         form.AddField("name", username);
         form.AddField("time", (int)gameController.gameDuration);
 
+		//Totally not 1337 haxx0r's score <.< >.> go away!
+		/*
+		form.AddField("score", 11337);
+		form.AddField("name", "1337 haxx0r");
+		form.AddField("time", 1337);
+		*/
+
+
         // Post to the PHP script on the server, which interfaces with SQL
         WWW www = new WWW(serverURI, form);
         yield return www;

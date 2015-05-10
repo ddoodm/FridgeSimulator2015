@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WallRun : MonoBehaviour {
+public class StickyJump : MonoBehaviour {
 
 	private PlayerController player;
 	
@@ -9,8 +9,8 @@ public class WallRun : MonoBehaviour {
 	{
 		if (other.tag == "Player") {
 			player = other.gameObject.GetComponent<PlayerController>();
-			player.wallRunning = true;
-            player.wallRef = gameObject;
+			player.stickyJumping = true;
+			player.stickyRef = gameObject;
 		}
 	}
 	
@@ -18,10 +18,10 @@ public class WallRun : MonoBehaviour {
 	void OnTriggerExit(Collider other) 
 	{
 		if (other.tag == "Player") {
-            player.wallRef = null;
-			Debug.Log ("Fallen from wallrun");
-            player.wallRunning = false;
-            this.transform.parent.GetComponent<PlatformDropper>().drop();
+			player.stickyRef = null;
+			Debug.Log ("Fallen from sticky wall");
+			player.stickyJumping = false;
+			this.transform.parent.GetComponent<PlatformDropper>().drop();
 		}
 	} 
 }
