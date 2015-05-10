@@ -30,6 +30,8 @@ public class GameController : MonoBehaviour
 
     public float gameStartTime, gameDuration;
 
+    public Flasher flasher;
+
     void Start()
     {
         updateScore();
@@ -52,6 +54,7 @@ public class GameController : MonoBehaviour
     {
         gameOver = true;
         uiCanvas.gameObject.SetActive(true);
+        flasher.flash();
     }
 
     public bool isGameOver
