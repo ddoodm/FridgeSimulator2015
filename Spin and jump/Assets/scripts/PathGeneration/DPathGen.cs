@@ -7,7 +7,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum PathType { PATH_S, PATH_L, PATH_R, SPINNER, WALL, GAP, PATH_S_NOOBS };
+public enum PathType { PATH_S, PATH_L, PATH_R, SPINNER, WALL, GAP, PATH_S_NOOBS, STICKY };
 
 [System.Serializable]
 public class PathTile
@@ -52,6 +52,7 @@ public class DPathGen : MonoBehaviour
         prefab_spinner,
         prefab_gap,
         prefab_wall,
+		prefab_sticky,
         prefab_path_s_noobs;
 
     /// <summary>
@@ -124,6 +125,7 @@ public class DPathGen : MonoBehaviour
             case PathType.SPINNER: nextType = newPathFrom_Spinner(); break;
             case PathType.GAP: nextType = newPathFrom_Gap(); break;
             case PathType.WALL: nextType = newPathFrom_Wall(); break;
+			case PathType.STICKY: nextType = newPathFrom_Sticky(); break;
         }
 
         lastType = nextType;
@@ -133,7 +135,7 @@ public class DPathGen : MonoBehaviour
 
     private PathType newPathFrom_PathS()
     {
-        const int options = 6;
+        const int options = 7;
 
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch(rand)
@@ -147,6 +149,7 @@ public class DPathGen : MonoBehaviour
             case 3: return PathType.GAP;
             case 4: return PathType.SPINNER;
             case 5: return PathType.WALL;
+			case 6: return PathType.STICKY;
             default: return PathType.PATH_S;
         }
     }
@@ -201,6 +204,14 @@ public class DPathGen : MonoBehaviour
         return PathType.PATH_S_NOOBS;
     }
 
+
+	private PathType newPathFrom_Sticky()
+	{
+		return PathType.PATH_S_NOOBS;
+	}
+
+
+
     private bool spawnType(PathType type)
     {
         switch(type)
@@ -227,6 +238,9 @@ public class DPathGen : MonoBehaviour
             case PathType.WALL:
                 boringPathCount = 0;
                 return spawn(prefab_wall, 0.0f);
+			case PathType.STICKY:
+				boringPathCount = 0;
+				return spawn (prefab_sticky, 0.0f);
             case PathType.PATH_S_NOOBS:
                 boringPathCount++;
                 return spawn(prefab_path_s_noobs, 0.0f);
@@ -264,7 +278,7 @@ public class DPathGen : MonoBehaviour
         switch(prefab.type)
         {
             // Straight paths add only the direction in which they travel
-            case PathType.PATH_S: case PathType.PATH_S_NOOBS: case PathType.GAP: case PathType.WALL:
+		case PathType.PATH_S: case PathType.PATH_S_NOOBS: case PathType.GAP: case PathType.WALL: case PathType.STICKY:
                 worldPos += prefab.size.z * prefab.scale.z * direction;
                 break;
 

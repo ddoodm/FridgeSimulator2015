@@ -59,6 +59,7 @@
      <Compile Include="Assets\scripts\Platforms\PlatformDestroyTrigger.cs" />
      <Compile Include="Assets\scripts\Platforms\PlatformDropper.cs" />
      <Compile Include="Assets\scripts\Platforms\Rotator.cs" />
+     <Compile Include="Assets\scripts\Platforms\StickyJump.cs" />
      <Compile Include="Assets\scripts\Platforms\TurnTrigger.cs" />
      <Compile Include="Assets\scripts\Platforms\WallRun.cs" />
      <Compile Include="Assets\scripts\PlayerControl\BiasPosition.cs" />
