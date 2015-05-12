@@ -144,13 +144,13 @@ public class DPathGen : MonoBehaviour
                 if (boringPathCount > maxBoringPaths)
                     return newPathFrom_PathS(); // Try again
                 return PathType.PATH_S;
-            case 1: return PathType.PATH_L;
-            case 2: return PathType.PATH_R;
-            case 3: return PathType.GAP;
-            case 4: return PathType.SPINNER;
-            case 5: return PathType.WALL;
+            //case 1: return PathType.PATH_L;
+            //case 2: return PathType.PATH_R;
+            //case 3: return PathType.GAP;
+            //case 4: return PathType.SPINNER;
+            //case 5: return PathType.WALL;
 			case 6: return PathType.STICKY;
-            default: return PathType.PATH_S;
+            default: return PathType.STICKY;
         }
     }
 

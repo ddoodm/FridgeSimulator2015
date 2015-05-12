@@ -57,7 +57,8 @@ public class PlayerController : MonoBehaviour
 	/// Flags used to allow player to jump along sticky wall platforms.
 	/// </summary>
 	public bool stickyJumping { get; set; }
-	public int numberOfJumps = 0;
+	private int numberOfJumps = -1;
+	private Vector3 jumpForceRight = new Vector3(0.0f, 1.0f, 100.0f);
 	public GameObject stickyRef = null;
 
     public bool canTurn { get; set; }
@@ -109,6 +110,28 @@ public class PlayerController : MonoBehaviour
             isInAir = true;
             jump.Play();
         }
+
+
+		//jumping for sticky platform
+		if (Input.GetButton("Jump") && numberOfJumps != -1)
+		{
+			switch(numberOfJumps){
+				case 0:
+				case 2:
+					rigidbody.AddForce(transform.rotation * -jumpForceRight);
+					break;
+				case 1:
+				case 3:
+					rigidbody.AddForce(transform.rotation * jumpForceRight);
+					break;
+				default :
+					break;
+			}
+			// Transform jump direction into the player's local space
+			jump.Play();
+			numberOfJumps++;
+		}
+
 
         if (wallRunning && isInAir)
             handleWallJump_Late();
@@ -180,16 +203,20 @@ public class PlayerController : MonoBehaviour
         Vector3 wallPos = wallRef.transform.position;
         Vector3 distance = Vector3.Scale(wallPos - playerPos, wallRight);
         this.rigidbody.position += distance * 5.0f * Time.deltaTime;
+		Debug.Log (distance);
     }
 
 
 	// Similar to Deinyons code but for sticky jumping.
 	private void handleStickyJump_Late()
 	{
-		if (!Input.GetButton("Jump"))
+		if (!Input.GetButton ("Jump")) {
+			gravityForce = 15.0f;
 			return;
-
-		rigidbody.AddForce(Vector3.down * 5.0f);
+		}
+		gravityForce = 10.0f;
+		//rigidbody.AddForce(Vector3.down * 0.1f);
+		rigidbody.AddForce(Vector3.left * 5.0f);
 		//rigidbody.AddForce(transform.forward * 15.0f);
 		//rigidbody.AddForce(Vector3.up * 10.0f);
 	}
@@ -200,26 +227,33 @@ public class PlayerController : MonoBehaviour
 			return;
 		
 		// NEW: Hold jump to wallride
-		if (!Input.GetButton("Jump"))
+		if (!Input.GetButton ("Jump")) {
+			Debug.Log("Plus: " + numberOfJumps);
 			return;
+		}
 
-		if (numberOfJumps > 4)
+		if (numberOfJumps == -1)
+			numberOfJumps = 0;
+
+		if (numberOfJumps > 3) {
+			numberOfJumps = -1;
 			return;
+		}
 
 		// Tend towards the wall
-		Vector3 stickRight = wallRef.transform.parent.right;
-		Vector3 stickLeft = -wallRef.transform.parent.right;
+		Vector3 stickRight = stickyRef.transform.parent.right;
 		stickRight = new Vector3(Mathf.Abs(stickRight.x), Mathf.Abs(stickRight.y), Mathf.Abs(stickRight.z));
-		stickLeft = new Vector3(Mathf.Abs(stickLeft.x), Mathf.Abs(stickLeft.y), Mathf.Abs(stickLeft.z));
 		Vector3 playerPos = this.transform.position;
-		Vector3 wallPos = wallRef.transform.position;
+		Vector3 wallPos = stickyRef.transform.position;
 
 		if (numberOfJumps % 2 == 0) {
-			Vector3 distance = Vector3.Scale (wallPos - playerPos, stickLeft);
-			this.rigidbody.position += distance * 5.0f * Time.deltaTime;
+			Vector3 distance = Vector3.Scale (-wallPos - playerPos, stickRight);
+			this.rigidbody.position += distance * 10.0f * Time.deltaTime;
+			Debug.Log("Left: " + numberOfJumps);
 		} else {
 			Vector3 distance = Vector3.Scale (wallPos - playerPos, stickRight);
-			this.rigidbody.position += distance * 5.0f * Time.deltaTime;
+			this.rigidbody.position += distance * 10.0f * Time.deltaTime;
+			Debug.Log("Right: " + numberOfJumps);
 		}
 
 	}
