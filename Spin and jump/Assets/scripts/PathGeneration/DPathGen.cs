@@ -149,7 +149,7 @@ public class DPathGen : MonoBehaviour
             case 3: return PathType.GAP;
             case 4: return PathType.SPINNER;
             case 5: return PathType.WALL;
-			case 6: return PathType.STICKY;
+			//case 6: return PathType.STICKY;
             default: return PathType.PATH_S;
         }
     }

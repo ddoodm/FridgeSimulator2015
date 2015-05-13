@@ -28,6 +28,9 @@ public class UserScoreGetter : MonoBehaviour
         timeText,
         titleText;
 
+    public InputField
+        usernameInputField;
+
     private string playerName;
 
     void Start()
@@ -42,6 +45,8 @@ public class UserScoreGetter : MonoBehaviour
         PlayerNameStore data = (PlayerNameStore)bf.Deserialize(file);
         file.Close();
         playerName = data.name;
+
+        usernameInputField.text = playerName;
 
         refreshInBackground();
     }

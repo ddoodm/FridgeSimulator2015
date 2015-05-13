@@ -21,7 +21,9 @@ public class Flasher : MonoBehaviour
 
         float dt = Time.time - startTime;
 
-        this.guiTexture.color = new Color(1.0f, 1.0f, 1.0f, flashForm.Evaluate(dt));
+        Color oldC = this.guiTexture.color;
+        oldC.a = flashForm.Evaluate(dt);
+        this.guiTexture.color = oldC;
 
         if (dt > flashForm.length)
             flashing = false;
