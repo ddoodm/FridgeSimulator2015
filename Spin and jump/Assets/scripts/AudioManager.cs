@@ -6,7 +6,7 @@ public class AudioManager : MonoBehaviour {
 	public AudioSource jump, land, step, stepSlow;
 	PlayerController player;
 	GameController gameController;
-	bool wasInAir, wasOnPlatform;
+	bool wasInAir, wasOnPlatform = true;
 	
 	void Start () {
 		player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
@@ -22,10 +22,8 @@ public class AudioManager : MonoBehaviour {
 			stepSlow.Stop();
 		}
 
-		if (!wasOnPlatform && player.onPlatform)
+		if (((!wasOnPlatform && player.onPlatform) || (wasInAir && !player.isInAir)) && !land.isPlaying)
 			land.Play();
-
-		wasOnPlatform = player.onPlatform;
 
 		if (wasInAir && !player.isInAir && !player.isSlowed) {
 			step.Play ();
@@ -33,12 +31,12 @@ public class AudioManager : MonoBehaviour {
 		else if (gameController.isGameOver)
 			step.Stop ();
 
-		wasInAir = player.isInAir;
-
 		if (!player.isSlowed) {// && player.isInAir == !wasInAir) {
 			stepSlow.Play ();
 			wasInAir = player.isInAir;
 		}
 
+        wasOnPlatform = player.onPlatform;
+        wasInAir = player.isInAir;
 	}
 }

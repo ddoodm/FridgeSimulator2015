@@ -108,7 +108,6 @@ public class PlayerController : MonoBehaviour
             isInAir = true;
         }
 
-
 		//jumping for sticky platform
 		if (Input.GetButton("Jump") && numberOfJumps != -1)
 		{
