@@ -86,8 +86,6 @@ public class PlayerController : MonoBehaviour
     public bool pushAllowed = false;
     public int overlappingPushZones = 0;
     public int alreadyPushedForID = -1;
-
-	public AudioSource jump, land, step, stepSlow;
 	
     void Start()
     {
@@ -108,7 +106,6 @@ public class PlayerController : MonoBehaviour
             // Transform jump direction into the player's local space
             rigidbody.AddForce(transform.rotation * jumpForce);
             isInAir = true;
-            jump.Play();
         }
 
 
@@ -128,7 +125,6 @@ public class PlayerController : MonoBehaviour
 					break;
 			}
 			// Transform jump direction into the player's local space
-			jump.Play();
 			numberOfJumps++;
 		}
 
@@ -148,9 +144,6 @@ public class PlayerController : MonoBehaviour
         // Parallel transform along the path (infinite force).
         if (!isInAir)
             transform.position += velocity;
-
-		if (isInAir && !isSlowed)
-			step.Play ();
 
         if (wallRunning && isInAir)
             handleWallJump();
