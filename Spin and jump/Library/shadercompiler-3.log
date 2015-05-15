@@ -1,5 +1,5 @@
-Base path: C:/Program Files (x86)/Unity/Editor/Data
-Pipe name: \\.\pipe\UnityShaderCompiler-3-12936
+Base path: O:/Program Files (x86)/Unity/Editor/Data
+Pipe name: \\.\pipe\UnityShaderCompiler-3-3124
 Cmd: getPlatforms
 Cmd: compileSnippet
   error: 1 plat 8 at (54): implicit truncation of vector type
