@@ -20,8 +20,6 @@ public class PlayerController : MonoBehaviour
         tempSpeed;
 		
 	float speed;
-
-    public bool paused;
 	
 	/// <summary>
 	/// position of the player before wallrunning.
@@ -101,10 +99,10 @@ public class PlayerController : MonoBehaviour
         rigidbody.AddForce(Vector3.down * gravityForce);
 
         // Add jump force
-        if (Input.GetButton("Jump") && !isInAir && !paused)
+        if (Input.GetButton("Jump") && !isInAir && !gameController.paused)
         {
             // Transform jump direction into the player's local space
-            rigidbody.AddForce(transform.rotation * jumpForce, ForceMode.Impulse);
+            rigidbody.AddForce(transform.rotation * jumpForce, ForceMode.VelocityChange);
             isInAir = true;
         }
 
@@ -151,21 +149,11 @@ public class PlayerController : MonoBehaviour
 
         oldPosition = transform.position;
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            paused = !paused;
-
         // Handle player speed when paused (Rob's stuff, slightly modified)
         if (moveSpeed > 0)
             tempSpeed = moveSpeed;
-        moveSpeed = paused ? 0.0f : tempSpeed;
+        moveSpeed = gameController.paused ? 0.0f : tempSpeed;
 	}
-
-    void OnGUI()
-    {
-        if (paused)
-            if (GUI.Button(new Rect(Screen.width / 2, Screen.height / 2, 150, 25), "Resume Playing"))
-                paused = false;
-    }
 	
     private void handleWallJump_Late()
     {

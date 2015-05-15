@@ -5,6 +5,7 @@ public class CameraController : MonoBehaviour
 {
 	public PlayerController player;
     public float butter = 0.1f;
+    private float tempButter;
 
 	private Vector3 offset;
     private Vector3 offsetRot;
@@ -18,6 +19,7 @@ public class CameraController : MonoBehaviour
 
 		offset = transform.position;
         offsetRot = transform.rotation.eulerAngles;
+        tempButter = butter;
 	}
 	
 	// Update is called once per frame
@@ -47,4 +49,14 @@ public class CameraController : MonoBehaviour
         //Vector3 yLock = new Vector3(1.0f, 0.0f, 1.0f);
         //transform.position = Vector3.Scale(transform.position, yLock) + Vector3.Scale(offset, Vector3.up);
 	}
+
+    public void toggleCinematicCam(bool cinematic)
+    {
+        if (cinematic)
+            butter = 0.85f;
+        else
+            butter = tempButter;
+
+        Debug.Log("Cinematic camera toggled to: " + cinematic + ", butter: " + butter);
+    }
 }
