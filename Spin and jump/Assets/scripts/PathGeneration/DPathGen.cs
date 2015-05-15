@@ -65,6 +65,9 @@ public class DPathGen : MonoBehaviour
     /// </summary>
     public int maxPerFrame = 3;
 
+    public float difficulty = 0;
+    public float difficultyDelta = 0.05f;
+
     /// <summary>
     /// The direction in which the path is currently travelling
     /// </summary>
@@ -146,9 +149,9 @@ public class DPathGen : MonoBehaviour
                 return PathType.PATH_S;
             case 1: return PathType.PATH_L;
             case 2: return PathType.PATH_R;
-            case 3: return PathType.GAP;
-            case 4: return PathType.SPINNER;
-            case 5: return PathType.WALL;
+            case 3: if (difficulty >= 1) return PathType.GAP; else return newPathFrom_PathS();
+            case 4: if (difficulty >= 2) return PathType.SPINNER; else return newPathFrom_PathS();
+            case 5: if (difficulty >= 3) return PathType.WALL; else return newPathFrom_PathS();
 			//case 6: return PathType.STICKY;
             default: return PathType.PATH_S;
         }
@@ -161,9 +164,9 @@ public class DPathGen : MonoBehaviour
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch (rand)
         {
-            case 0: return PathType.PATH_S;
-            case 1: return PathType.GAP;
-            case 2: return PathType.SPINNER;
+            case 0: if (difficulty < 0.4) return PathType.PATH_S_NOOBS; else return PathType.PATH_S;
+            case 1: if (difficulty >= 10) return PathType.GAP; else return newPathFrom_PathLR();
+            case 2: if (difficulty >= 14) return PathType.SPINNER; else return newPathFrom_PathLR();
             default: return PathType.PATH_S;
         }
     }
@@ -203,7 +206,6 @@ public class DPathGen : MonoBehaviour
     {
         return PathType.PATH_S_NOOBS;
     }
-
 
 	private PathType newPathFrom_Sticky()
 	{
@@ -286,6 +288,9 @@ public class DPathGen : MonoBehaviour
                 worldPos += Vector3.Scale(prefab.size, direction * 0.5f);
                 break;
         }
+
+        // Increase path difficulty
+        difficulty += difficultyDelta;
 
         return true;
     }
