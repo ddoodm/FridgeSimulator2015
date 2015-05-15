@@ -195,7 +195,6 @@ public class PlayerController : MonoBehaviour
         Vector3 wallPos = wallRef.transform.position;
         Vector3 distance = Vector3.Scale(wallPos - playerPos, wallRight);
         this.rigidbody.position += distance * 5.0f * Time.deltaTime;
-		Debug.Log (distance);
     }
 
 
@@ -278,9 +277,9 @@ public class PlayerController : MonoBehaviour
         get
         {
             if (!gameController.isGameOver && !isSlowed)
-                return transform.forward * moveSpeed;
+                return transform.forward * moveSpeed * Time.deltaTime;
             else
-                return transform.forward * slowedSpeed;
+                return transform.forward * slowedSpeed * Time.deltaTime;
         }
     }
 
@@ -294,9 +293,7 @@ public class PlayerController : MonoBehaviour
                 Vector3 yLock = new Vector3(1.0f, 0.0f, 1.0f);
                 return Vector3.Scale(rigidbody.velocity, yLock).magnitude * Time.deltaTime;
             }
-            if (isSlowed)
-                return slowedSpeed;
-            return moveSpeed;
+            return velocity.magnitude;
         }
     }
 
@@ -305,6 +302,14 @@ public class PlayerController : MonoBehaviour
         get
         {
             return currentPlatform != null;
+        }
+    }
+
+    public bool onObject
+    {
+        get
+        {
+            return objectUnderPlayer != null;
         }
     }
 
