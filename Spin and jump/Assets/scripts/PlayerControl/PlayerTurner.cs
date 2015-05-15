@@ -100,12 +100,12 @@ public class PlayerTurner : MonoBehaviour
         if (!playerController.canTurn)
             return;
 
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             rotateState.rotate(Direction.RIGHT, Time.time);
             playerController.canTurn = false;
         }
-        else if (Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             rotateState.rotate(Direction.LEFT, Time.time);
             playerController.canTurn = false;
