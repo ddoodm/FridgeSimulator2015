@@ -95,6 +95,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void LateUpdate()
     {
+        jumpForce.z = moveSpeed * 13 / 5;
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
 
