@@ -95,7 +95,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void LateUpdate()
     {
-        jumpForce.z = moveSpeed * 13 / 5;
+        // @Rob, I don't know about this one just yet, it makes progress a little impossible even with new values.
+        // jumpForce.z = moveSpeed * 2f;
+
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
 

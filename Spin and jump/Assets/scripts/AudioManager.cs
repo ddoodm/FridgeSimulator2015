@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AudioManager : MonoBehaviour {
 
-	public AudioSource jump, land, step, stepSlow;
+	public AudioSource jump, land, step, stepSlow, loop, loop2;
 	PlayerController player;
 	GameController gameController;
 	bool wasInAir, wasPaused, wasOnPlatform = true;
@@ -49,4 +49,18 @@ public class AudioManager : MonoBehaviour {
         wasInAir = player.isInAir;
         wasPaused = gameController.paused;
 	}
+
+    public void swapTracks()
+    {
+        if (loop.isPlaying)
+        {
+            loop.Stop();
+            loop2.Play();
+        }
+        else
+        {
+            loop.Play();
+            loop2.Stop();
+        }
+    }
 }

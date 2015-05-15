@@ -120,5 +120,6 @@ public class GameController : MonoBehaviour
     public void mainMenu()
     {
         Application.LoadLevel(0);
+        paused = false;
     }
 }
