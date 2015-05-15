@@ -101,10 +101,10 @@ public class PlayerController : MonoBehaviour
         rigidbody.AddForce(Vector3.down * gravityForce);
 
         // Add jump force
-        if (Input.GetButton("Jump") && !isInAir && paused == false)
+        if (Input.GetButton("Jump") && !isInAir && !paused)
         {
             // Transform jump direction into the player's local space
-            rigidbody.AddForce(transform.rotation * jumpForce);
+            rigidbody.AddForce(transform.rotation * jumpForce, ForceMode.Impulse);
             isInAir = true;
         }
 
@@ -126,7 +126,6 @@ public class PlayerController : MonoBehaviour
 			// Transform jump direction into the player's local space
 			numberOfJumps++;
 		}
-
 
         if (wallRunning && isInAir)
             handleWallJump_Late();

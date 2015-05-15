@@ -15,6 +15,7 @@ public class PathTile
     public GameObject gameObject;
     public GameObject instance;
     public PathType type;
+    public Vector3 startWorldPos;
 
     public PathTile(GameObject gameObject, PathType type)
     {
@@ -110,9 +111,14 @@ public class DPathGen : MonoBehaviour
          */
         while (
             (player.transform.position - worldPos).magnitude < spawnDistance
-            && genCount --> 0
+            && genCount-- > 0
             && !collision)
-                collision = !fsmPathGen();
+        {
+            collision = !fsmPathGen();
+
+            //if (collision)
+                //removeLastTile(); < This does not work yet
+        }
     }
 
     private bool fsmPathGen()
@@ -274,6 +280,8 @@ public class DPathGen : MonoBehaviour
         tiles.Push(prefab);
         tileIdx += direction;
 
+        prefab.startWorldPos = worldPos;
+
         // Update the world position
         switch(prefab.type)
         {
@@ -398,4 +406,14 @@ public class DPathGen : MonoBehaviour
     {
         direction = Quaternion.AngleAxis(angle, Vector3.up) * direction;
     }
+
+    /*
+    private void removeLastTile()
+    {
+        PathTile last = tiles.Peek();
+        Destroy(last.instance);
+
+        worldPos = last.startWorldPos;
+    }
+     */
 }
