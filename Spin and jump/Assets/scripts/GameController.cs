@@ -31,12 +31,34 @@ public class GameController : MonoBehaviour
         speedCap = 0.2f,
         speedDelta = 0.01f;
 
+	// Difficulty Variables sent to dPathGen
+	public float difficulty = 0.0f;
+	public float speedDifficulty = 1.0f;
+	public float difficultyDelta = 0.05f;
+
     public float gameStartTime, gameDuration;
 
     public Flasher flasher;
 
     void Start()
     {
+		difficulty = PlayerPrefs.GetFloat ("difficulty");
+
+		speedDifficulty = PlayerPrefs.GetFloat ("Speed Difficulty");
+
+		player.moveSpeed = speedDifficulty;
+
+
+		for (int i = 0; i <= speedDifficulty; i++) {
+			checkpointIncrement += checkpointIncrement * 0.5f;
+		}
+
+
+		
+		if (difficulty >= 2800) {
+			difficulty = 4000;
+		}
+
         updateScore();
 
         gameStartTime = Time.time;
@@ -47,6 +69,17 @@ public class GameController : MonoBehaviour
         score += newScoreValue;
         updateScore();
     }
+
+	public void CalculateDifficulty(float newDifficultyValue)
+	{
+		difficulty += newDifficultyValue;
+		speedDifficulty += newDifficultyValue;
+	}
+
+	public float getDifficulty()
+	{
+		return difficulty / 100;
+	}
 
 	public void RemoveScore(float newScoreValue)
 	{
@@ -102,17 +135,26 @@ public class GameController : MonoBehaviour
             // New velocity-based scoring
             float dist = player.velocityMagnitude * scoreDelta;
             AddScore(dist);
+			CalculateDifficulty(dist);
 
             // Update the game duration time
             gameDuration = Time.time - gameStartTime;
-        }
 
-        if (((int)score % (int)checkpointIncrement) == 0 && score >= 1.0f && (player.moveSpeed < speedCap))
-        {
-            player.moveSpeed += speedDelta;
-            Debug.Log("Speed Increased AT " + checkpointIncrement + " TO " + player.moveSpeed);
 
-            checkpointIncrement += checkpointIncrement * 0.5f;
+
+			// Update the difficulty Level
+			//if ((int) score % 100)
+
+			//difficulty += score/1000 * Time.deltaTime;
+
+
+			if (((int)speedDifficulty % (int)checkpointIncrement) == 0 && (player.moveSpeed < speedCap))
+			{
+				player.moveSpeed += speedDelta;
+				Debug.Log("Speed Increased AT " + checkpointIncrement + " TO " + player.moveSpeed);
+				
+				checkpointIncrement += checkpointIncrement * 0.5f;
+			}
         }
     }
 
