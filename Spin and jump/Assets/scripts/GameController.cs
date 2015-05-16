@@ -19,9 +19,12 @@ public class GameController : MonoBehaviour
     public float scoreDelta = 0.25f;
 
     public Canvas uiCanvas;
+    public Canvas pauseCanvas;
 
     private bool gameOver = false;
     public float score = 0;
+
+    public bool paused = false;
 
     public float
         checkpointIncrement = 200.0f,
@@ -55,6 +58,9 @@ public class GameController : MonoBehaviour
         gameOver = true;
         uiCanvas.gameObject.SetActive(true);
         flasher.flash();
+
+        paused = false;
+        pauseCanvas.gameObject.SetActive(false);
     }
 
     public bool isGameOver
@@ -73,10 +79,15 @@ public class GameController : MonoBehaviour
         // The score integral is the player's time alive
         if (!gameOver)
         {
-            /* Rob's distance-based counter. Disabled in order to allow score to increment regardless of position
-            float dist = Vector3.Distance (player.transform.position, scorigin.position);
-            SetScore(dist);
-             */
+            // Pause if required
+            if (Input.GetKeyDown(KeyCode.Escape))
+                pauseCanvas.gameObject.SetActive(paused = !paused);
+            if (paused)
+            {
+                Time.timeScale = .0f;
+                return;
+            }
+            else Time.timeScale = 1.0f;
 
             // New velocity-based scoring
             float dist = player.velocityMagnitude * scoreDelta;
@@ -100,8 +111,15 @@ public class GameController : MonoBehaviour
         Application.LoadLevel(Application.loadedLevel);
     }
 
+    public void resumeGame()
+    {
+        paused = false;
+        pauseCanvas.gameObject.SetActive(false);
+    }
+
     public void mainMenu()
     {
         Application.LoadLevel(0);
+        paused = false;
     }
 }

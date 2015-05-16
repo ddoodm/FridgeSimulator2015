@@ -81,12 +81,12 @@ public class BiasPosition : MonoBehaviour
             (playerController.alreadyPushedForID == playerController.currentPlatform.GetInstanceID()))
             return;
 
-        if (!lastFrameAKey && Input.GetKey(KeyCode.A))
+        if (!lastFrameAKey && Input.GetKey(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
             pushByLanes(-1);
-        if (!lastFrameDKey && Input.GetKey(KeyCode.D))
+        if (!lastFrameDKey && Input.GetKey(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             pushByLanes(+1);
 
-        lastFrameAKey = Input.GetKey(KeyCode.A); lastFrameDKey = Input.GetKey(KeyCode.D);
+        lastFrameAKey = Input.GetKey(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow); lastFrameDKey = Input.GetKey(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow);
     }
 
     public void pushByLanes(int lanesToJump)

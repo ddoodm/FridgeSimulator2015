@@ -20,8 +20,6 @@ public class PlayerController : MonoBehaviour
         tempSpeed;
 		
 	float speed;
-
-    public bool paused;
 	
 	/// <summary>
 	/// position of the player before wallrunning.
@@ -97,14 +95,17 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void LateUpdate()
     {
+        // @Rob, I don't know about this one just yet, it makes progress a little impossible even with new values.
+        // jumpForce.z = moveSpeed * 2f;
+
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
 
         // Add jump force
-        if (Input.GetButton("Jump") && !isInAir && paused == false)
+        if (Input.GetButton("Jump") && !isInAir && !gameController.paused)
         {
             // Transform jump direction into the player's local space
-            rigidbody.AddForce(transform.rotation * jumpForce);
+            rigidbody.AddForce(transform.rotation * jumpForce, ForceMode.VelocityChange);
             isInAir = true;
         }
 
@@ -126,7 +127,6 @@ public class PlayerController : MonoBehaviour
 			// Transform jump direction into the player's local space
 			numberOfJumps++;
 		}
-
 
         if (wallRunning && isInAir)
             handleWallJump_Late();
@@ -152,21 +152,11 @@ public class PlayerController : MonoBehaviour
 
         oldPosition = transform.position;
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            paused = !paused;
-
         // Handle player speed when paused (Rob's stuff, slightly modified)
         if (moveSpeed > 0)
             tempSpeed = moveSpeed;
-        moveSpeed = paused ? 0.0f : tempSpeed;
+        moveSpeed = gameController.paused ? 0.0f : tempSpeed;
 	}
-
-    void OnGUI()
-    {
-        if (paused)
-            if (GUI.Button(new Rect(Screen.width / 2, Screen.height / 2, 150, 25), "Resume Playing"))
-                paused = false;
-    }
 	
     private void handleWallJump_Late()
     {
@@ -195,7 +185,6 @@ public class PlayerController : MonoBehaviour
         Vector3 wallPos = wallRef.transform.position;
         Vector3 distance = Vector3.Scale(wallPos - playerPos, wallRight);
         this.rigidbody.position += distance * 5.0f * Time.deltaTime;
-		Debug.Log (distance);
     }
 
 
@@ -278,9 +267,9 @@ public class PlayerController : MonoBehaviour
         get
         {
             if (!gameController.isGameOver && !isSlowed)
-                return transform.forward * moveSpeed;
+                return transform.forward * moveSpeed * Time.deltaTime;
             else
-                return transform.forward * slowedSpeed;
+                return transform.forward * slowedSpeed * Time.deltaTime;
         }
     }
 
@@ -294,9 +283,7 @@ public class PlayerController : MonoBehaviour
                 Vector3 yLock = new Vector3(1.0f, 0.0f, 1.0f);
                 return Vector3.Scale(rigidbody.velocity, yLock).magnitude * Time.deltaTime;
             }
-            if (isSlowed)
-                return slowedSpeed;
-            return moveSpeed;
+            return velocity.magnitude;
         }
     }
 
@@ -305,6 +292,14 @@ public class PlayerController : MonoBehaviour
         get
         {
             return currentPlatform != null;
+        }
+    }
+
+    public bool onObject
+    {
+        get
+        {
+            return objectUnderPlayer != null;
         }
     }
 
