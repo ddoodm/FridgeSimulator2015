@@ -47,6 +47,16 @@ public class GameController : MonoBehaviour
         score += newScoreValue;
         updateScore();
     }
+
+	public void RemoveScore(float newScoreValue)
+	{
+		score -= newScoreValue;
+		if (score < 0) {
+			score = 0;
+		}
+		updateScore();
+	}
+	
     public void SetScore(float newScoreValue)
     {
         score = newScoreValue;

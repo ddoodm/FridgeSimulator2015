@@ -99,7 +99,8 @@ public class DPathGen : MonoBehaviour
     }
 
     public void Update()
-    {
+	{
+		Debug.Log ("Difficulty: " + difficulty);
         int genCount = maxPerFrame;
         bool collision = false;
 
@@ -128,13 +129,25 @@ public class DPathGen : MonoBehaviour
         switch (lastType = tiles.Peek().type)
         {
             case PathType.PATH_S:
-            case PathType.PATH_S_NOOBS: nextType = newPathFrom_PathS(); break;
+            case PathType.PATH_S_NOOBS: 
+				nextType = newPathFrom_PathS(); 
+				break;
             case PathType.PATH_L:
-            case PathType.PATH_R: nextType = newPathFrom_PathLR(); break;
-            case PathType.SPINNER: nextType = newPathFrom_Spinner(); break;
-            case PathType.GAP: nextType = newPathFrom_Gap(); break;
-            case PathType.WALL: nextType = newPathFrom_Wall(); break;
-			case PathType.STICKY: nextType = newPathFrom_Sticky(); break;
+            case PathType.PATH_R: 
+				nextType = newPathFrom_PathLR(); 
+				break;
+            case PathType.SPINNER: 
+				nextType = newPathFrom_Spinner(); 
+				break;
+            case PathType.GAP: 
+				nextType = newPathFrom_Gap(); 
+				break;
+            case PathType.WALL: 
+				nextType = newPathFrom_Wall(); 
+				break;
+			case PathType.STICKY: 
+				nextType = newPathFrom_Sticky(); 
+				break;
         }
 
         lastType = nextType;
@@ -170,9 +183,9 @@ public class DPathGen : MonoBehaviour
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch (rand)
         {
-            case 0: if (difficulty < 0.4) return PathType.PATH_S_NOOBS; else return PathType.PATH_S;
-            case 1: if (difficulty >= 10) return PathType.GAP; else return newPathFrom_PathLR();
-            case 2: if (difficulty >= 14) return PathType.SPINNER; else return newPathFrom_PathLR();
+            case 0: if (difficulty < 0.5) return PathType.PATH_S_NOOBS; else return PathType.PATH_S;
+            //case 1: if (difficulty >= 10) return PathType.GAP; else return newPathFrom_PathLR();
+            //case 2: if (difficulty >= 14) return PathType.SPINNER; else return newPathFrom_PathLR();
             default: return PathType.PATH_S;
         }
     }
@@ -184,38 +197,147 @@ public class DPathGen : MonoBehaviour
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch (rand)
         {
-            case 0: return PathType.PATH_S;
-            //case 1: return PathType.PATH_L;
-            //case 2: return PathType.PATH_R;
-            default: return PathType.PATH_S;
+			case 0:
+				if (difficulty >= 25) 
+					return PathType.PATH_S; 
+				else 
+					return PathType.PATH_S_NOOBS;
+			case 1:
+				if (difficulty >= 20) 
+					return PathType.PATH_L; 
+				else 
+					return PathType.PATH_S_NOOBS;
+			case 2:
+				if (difficulty >= 20) 
+					return PathType.PATH_R; 
+				else 
+					return PathType.PATH_S_NOOBS;
+				
+
+			default: 
+				if (difficulty >= 5) 
+					return PathType.PATH_S;
+				else 
+					return PathType.PATH_S_NOOBS;
+
+
         }
     }
 
     private PathType newPathFrom_Gap()
     {
-        const int options = 3;
+        const int options = 4;
 
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch (rand)
         {
-            case 0:
-                if (boringPathCount > maxBoringPaths)
-                    return newPathFrom_Gap(); // Try again
-                return PathType.PATH_S;
-            case 1: return PathType.PATH_L;
-            case 2: return PathType.PATH_R;
-            default: return PathType.PATH_S;
+
+
+		case 0:
+			if (boringPathCount > maxBoringPaths)
+				return newPathFrom_Gap(); // Try again
+			if (difficulty >= 10) 
+				return PathType.PATH_S; 
+			else 
+				return PathType.PATH_S_NOOBS;
+		case 1: 
+			if (difficulty >= 30) 
+				return PathType.PATH_S; 
+			else 
+				return PathType.PATH_S_NOOBS;
+		case 2:
+			if (difficulty >= 15)
+				return PathType.PATH_L; 
+			else
+				return PathType.PATH_S_NOOBS;
+		case 3:
+			if (difficulty >= 15)
+				return PathType.PATH_R; 
+			else
+				return PathType.PATH_S_NOOBS;
+		default: 
+			if (difficulty >= 5) 
+				return PathType.PATH_S;
+			else 
+				return PathType.PATH_S_NOOBS;
+
+
+
         }
     }
 
     private PathType newPathFrom_Wall()
-    {
-        return PathType.PATH_S_NOOBS;
+	{
+		const int options = 4;
+		
+		int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
+		switch (rand)
+		{
+			case 0:
+				if (boringPathCount > maxBoringPaths)
+					return newPathFrom_Gap(); // Try again
+				if (difficulty >= 15) 
+					return PathType.PATH_S; 
+				else 
+					return PathType.PATH_S_NOOBS;
+			case 1: 
+				if (difficulty >= 20) 
+					return PathType.PATH_S; 
+				else 
+					return PathType.PATH_S_NOOBS;
+			case 2:
+				if (difficulty >= 15)
+					return PathType.PATH_L; 
+				else
+					return PathType.PATH_S_NOOBS;
+			case 3:
+				if (difficulty >= 15)
+					return PathType.PATH_R; 
+				else
+					return PathType.PATH_S_NOOBS;
+			default: 
+				if (difficulty >= 5) 
+					return PathType.PATH_S;
+				else 
+					return PathType.PATH_S_NOOBS;
+		}
     }
 
 	private PathType newPathFrom_Sticky()
 	{
-		return PathType.PATH_S_NOOBS;
+		const int options = 4;
+		
+		int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
+		switch (rand)
+		{
+		case 0:
+			if (boringPathCount > maxBoringPaths)
+				return newPathFrom_Gap(); // Try again
+			if (difficulty >= 25) 
+				return PathType.PATH_S; 
+			else 
+				return PathType.PATH_S_NOOBS;
+		case 1: 
+			if (difficulty >= 35) 
+				return PathType.PATH_S; 
+			else 
+				return PathType.PATH_S_NOOBS;
+		case 2:
+			if (difficulty >= 20)
+				return PathType.PATH_L; 
+			else
+				return PathType.PATH_S_NOOBS;
+		case 3:
+			if (difficulty >= 20)
+				return PathType.PATH_R; 
+			else
+				return PathType.PATH_S_NOOBS;
+		default: 
+			if (difficulty >= 25) 
+				return PathType.PATH_S;
+			else 
+				return PathType.PATH_S_NOOBS;
+		}
 	}
 
     private bool spawnType(PathType type)
@@ -299,6 +421,7 @@ public class DPathGen : MonoBehaviour
 
         // Increase path difficulty
         difficulty += difficultyDelta;
+
 
         return true;
     }
