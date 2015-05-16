@@ -311,14 +311,9 @@ public class PlayerController : MonoBehaviour
     {
         get
         {
-            // Cast a ray down to determine whether we're over a platform
-            RaycastHit hit;
-            if (!Physics.Raycast(new Ray(transform.position, Vector3.down), out hit))
-                return null;
-
-            if (hit.collider.tag == "Platform")
-                return hit.collider.gameObject;
-
+            GameObject obj = objectUnderPlayer;
+            if (obj.tag == "Platform")
+                return obj;
             return null;
         }
     }
@@ -330,7 +325,18 @@ public class PlayerController : MonoBehaviour
             // Cast a ray down to determine whether we're over a platform
             RaycastHit hit;
             if (!Physics.Raycast(new Ray(transform.position, Vector3.down), out hit))
+            {
+                // No hit on middle ray, try again:
+                Ray rl = new Ray(transform.position - transform.right, Vector3.down);
+                Ray rr = new Ray(transform.position + transform.right, Vector3.down);
+
+                if (Physics.Raycast(rl, out hit))
+                    return hit.collider.gameObject;
+                if (Physics.Raycast(rr, out hit))
+                    return hit.collider.gameObject;
+
                 return null;
+            }
             return hit.collider.gameObject;
         }
     }
