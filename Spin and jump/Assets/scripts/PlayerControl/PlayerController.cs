@@ -84,6 +84,9 @@ public class PlayerController : MonoBehaviour
     public bool pushAllowed = false;
     public int overlappingPushZones = 0;
     public int alreadyPushedForID = -1;
+
+    public CamShaker camera;
+    private bool wasInAir;
 	
     void Start()
     {
@@ -144,6 +147,10 @@ public class PlayerController : MonoBehaviour
         if (objectUnderPlayer != null && objectUnderPlayer.tag == "Obstacle")
             gameController.AddScore(2.0f);
 
+        // Shake
+        if (wasInAir && !isInAir)
+            camera.shake();
+
         // Parallel transform along the path (infinite force).
         if (!isInAir)
             transform.position += velocity;
@@ -160,6 +167,8 @@ public class PlayerController : MonoBehaviour
         if (moveSpeed > 0)
             tempSpeed = moveSpeed;
         moveSpeed = gameController.paused ? 0.0f : tempSpeed;
+
+        wasInAir = isInAir;
 	}
 	
     private void handleWallJump_Late()
@@ -312,7 +321,7 @@ public class PlayerController : MonoBehaviour
         get
         {
             GameObject obj = objectUnderPlayer;
-            if (obj.tag == "Platform")
+            if (obj != null && obj.tag == "Platform")
                 return obj;
             return null;
         }
@@ -327,8 +336,8 @@ public class PlayerController : MonoBehaviour
             if (!Physics.Raycast(new Ray(transform.position, Vector3.down), out hit))
             {
                 // No hit on middle ray, try again:
-                Ray rl = new Ray(transform.position - transform.right, Vector3.down);
-                Ray rr = new Ray(transform.position + transform.right, Vector3.down);
+                Ray rl = new Ray(transform.position - transform.right * 0.5f, Vector3.down);
+                Ray rr = new Ray(transform.position + transform.right * 0.5f, Vector3.down);
 
                 if (Physics.Raycast(rl, out hit))
                     return hit.collider.gameObject;

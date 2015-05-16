@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CamShaker.cs" />
      <Compile Include="Assets\OnTriggerActivate.cs" />
      <Compile Include="Assets\OnTriggerEndGame.cs" />
      <Compile Include="Assets\SlowOnContact.cs" />
