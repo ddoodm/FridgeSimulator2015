@@ -140,6 +140,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
 	void Update()
 	{
+        // Playtesters wanted free points for jumping obstacles
+        if (objectUnderPlayer != null && objectUnderPlayer.tag == "Obstacle")
+            gameController.AddScore(2.0f);
+
         // Parallel transform along the path (infinite force).
         if (!isInAir)
             transform.position += velocity;

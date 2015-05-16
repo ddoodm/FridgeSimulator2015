@@ -82,6 +82,8 @@ public class DPathGen : MonoBehaviour
     public int maxBoringPaths = 3;
     private int boringPathCount = 0;
 
+    public BoxCollider bounds;
+
     private PlayerController player;
 
     public void Start()
@@ -100,7 +102,6 @@ public class DPathGen : MonoBehaviour
 
     public void Update()
 	{
-		Debug.Log ("Difficulty: " + difficulty);
         int genCount = maxPerFrame;
         bool collision = false;
 
@@ -212,15 +213,11 @@ public class DPathGen : MonoBehaviour
 					return PathType.PATH_R; 
 				else 
 					return PathType.PATH_S_NOOBS;
-				
-
 			default: 
 				if (difficulty >= 5) 
 					return PathType.PATH_S;
 				else 
 					return PathType.PATH_S_NOOBS;
-
-
         }
     }
 
@@ -231,8 +228,6 @@ public class DPathGen : MonoBehaviour
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch (rand)
         {
-
-
 		case 0:
 			if (boringPathCount > maxBoringPaths)
 				return newPathFrom_Gap(); // Try again
@@ -260,9 +255,6 @@ public class DPathGen : MonoBehaviour
 				return PathType.PATH_S;
 			else 
 				return PathType.PATH_S_NOOBS;
-
-
-
         }
     }
 
@@ -437,6 +429,11 @@ public class DPathGen : MonoBehaviour
         Vector3 ro = worldPos;
         Vector3 rd = direction;
         float rayLength = Vector3.Scale(prefab.size, rd).magnitude * 2.5f;
+
+        // Check for boundary collision
+        Vector3 newpos = ro + rd * rayLength;
+        if ((Mathf.Abs(newpos.x) > bounds.size.x / 2.0f) || (Mathf.Abs(newpos.z) > bounds.size.z))
+            return true;
 
         // Vector orthonormal to the direction and up vectors (right vector)
         Vector3 right = Vector3.Cross(direction, Vector3.up);
