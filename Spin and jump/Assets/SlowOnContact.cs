@@ -6,6 +6,7 @@ public class SlowOnContact : MonoBehaviour {
 	private GameController gameController;
 	private PlayerController playerController;
     private CamShaker camera;
+    public AudioSource impact;
 
     public float slowValue = 0;
 
@@ -22,6 +23,7 @@ public class SlowOnContact : MonoBehaviour {
         {
 			float scoreRemove = playerController.moveSpeed * 10;
 			gameController.RemoveScore(50.0f);
+            impact.Play();
 
             //Destroy(gameObject);
             camera.shake();
