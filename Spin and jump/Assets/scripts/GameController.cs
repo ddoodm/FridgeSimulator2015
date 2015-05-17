@@ -34,7 +34,7 @@ public class GameController : MonoBehaviour
 	// Difficulty Variables sent to dPathGen
 	public float difficulty = 0.0f;
 	public float speedDifficulty = 5.0f;
-	public float difficultyDelta = 0.05f;
+	public float difficultyDelta = 1.0f;
 
     public float gameStartTime, gameDuration;
 
@@ -46,12 +46,10 @@ public class GameController : MonoBehaviour
 
 		speedDifficulty = PlayerPrefs.GetFloat ("SpeedDifficulty");
 
-		Debug.Log (PlayerPrefs.GetFloat ("SpeedDifficulty"));
-		Debug.Log (PlayerPrefs.GetFloat ("Difficulty"));
 		player.moveSpeed = speedDifficulty;
 
 
-		for (int i = 0; i <= speedDifficulty; i++) {
+		for (int i = 0; i < speedDifficulty - 5; i++) {
 			checkpointIncrement += checkpointIncrement * 0.5f;
 		}
 
@@ -68,6 +66,7 @@ public class GameController : MonoBehaviour
 
     public void AddScore(float newScoreValue)
     {
+		newScoreValue += newScoreValue * difficultyDelta;
         score += newScoreValue;
         updateScore();
     }
@@ -76,6 +75,8 @@ public class GameController : MonoBehaviour
 	{
 		difficulty += newDifficultyValue;
 		speedDifficulty += newDifficultyValue;
+		difficultyDelta = difficulty / 10000;
+		difficultyDelta += difficultyDelta * (Mathf.Pow (difficulty / 10000, 2.0f));
 	}
 
 	public float getDifficulty()
@@ -141,14 +142,6 @@ public class GameController : MonoBehaviour
 
             // Update the game duration time
             gameDuration = Time.time - gameStartTime;
-
-
-
-			// Update the difficulty Level
-			//if ((int) score % 100)
-
-			//difficulty += score/1000 * Time.deltaTime;
-
 
 			if (((int)speedDifficulty % (int)checkpointIncrement) == 0 && (player.moveSpeed < speedCap))
 			{

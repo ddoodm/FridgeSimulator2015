@@ -13,8 +13,8 @@ public class MainMenuController : MonoBehaviour
     {
 		PlayerPrefs.SetFloat("difficulty", difficulty);
 		PlayerPrefs.SetFloat("SpeedDifficulty", speedDifficulty);
-		//Debug.Log (speedDifficulty);
-        buttonPress.Play();
+
+		buttonPress.Play();
         Application.LoadLevel(mainSceneName);
     }
 
