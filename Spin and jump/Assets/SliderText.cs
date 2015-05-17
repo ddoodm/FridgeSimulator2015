@@ -24,7 +24,7 @@ public class SliderText : MonoBehaviour {
 		if (mainSlider.maxValue == 3000) {
 			sliderText.text = "Difficulty: " + ((int)mainSlider.value / 100).ToString ();
 		} else if (mainSlider.maxValue == 15) {
-			sliderText.text = "Speed: " + ((int)mainSlider.value).ToString ();
+			sliderText.text = "Speed: " + ((int)mainSlider.value - 5).ToString ();
 
 		}
 	}

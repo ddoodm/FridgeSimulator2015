@@ -7,12 +7,13 @@ public class MainMenuController : MonoBehaviour
     public AudioSource buttonPress;
 
 	public float difficulty = 0.0f;
-	public float speedDifficulty = 1.0f;
+	public float speedDifficulty = 5.0f;
 
     public void onClick_Start()
     {
 		PlayerPrefs.SetFloat("difficulty", difficulty);
-		PlayerPrefs.SetFloat("Speed Difficulty", speedDifficulty);
+		PlayerPrefs.SetFloat("SpeedDifficulty", speedDifficulty);
+		//Debug.Log (speedDifficulty);
         buttonPress.Play();
         Application.LoadLevel(mainSceneName);
     }

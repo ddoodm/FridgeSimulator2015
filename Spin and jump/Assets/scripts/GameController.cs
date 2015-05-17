@@ -33,7 +33,7 @@ public class GameController : MonoBehaviour
 
 	// Difficulty Variables sent to dPathGen
 	public float difficulty = 0.0f;
-	public float speedDifficulty = 1.0f;
+	public float speedDifficulty = 5.0f;
 	public float difficultyDelta = 0.05f;
 
     public float gameStartTime, gameDuration;
@@ -44,8 +44,10 @@ public class GameController : MonoBehaviour
     {
 		difficulty = PlayerPrefs.GetFloat ("difficulty");
 
-		speedDifficulty = PlayerPrefs.GetFloat ("Speed Difficulty");
+		speedDifficulty = PlayerPrefs.GetFloat ("SpeedDifficulty");
 
+		Debug.Log (PlayerPrefs.GetFloat ("SpeedDifficulty"));
+		Debug.Log (PlayerPrefs.GetFloat ("Difficulty"));
 		player.moveSpeed = speedDifficulty;
 
 
