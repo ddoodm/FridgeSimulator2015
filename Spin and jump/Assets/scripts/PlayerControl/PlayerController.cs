@@ -102,7 +102,11 @@ public class PlayerController : MonoBehaviour
         // jumpForce.z = moveSpeed * 2f;
 
         // Add gravity force
-        rigidbody.AddForce(Vector3.down * gravityForce);
+        rigidbody.AddForce(Vector3.down * gravityForce * Time.timeScale);
+
+        // Check for turbo-jump bug, at fix it in the most sketchy way imaginable
+        if (rigidbody.velocity.y > jumpForce.y)
+            rigidbody.AddForce(Vector3.down * rigidbody.velocity.y * 0.5f, ForceMode.VelocityChange);
 
         if (!wasInAir && isInAir)
         {

@@ -11,6 +11,13 @@ public class AudioManager : MonoBehaviour {
 	void Start () {
 		player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 		gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
+
+        // Play music
+        switch(PlayerPrefs.GetInt("MusicTrackID"))
+        {
+            case 0: loop2.Play(); break;
+            case 1: loop.Play(); break;
+        }
 	}
 
 	void Update () {
@@ -56,11 +63,13 @@ public class AudioManager : MonoBehaviour {
         {
             loop.Stop();
             loop2.Play();
+            PlayerPrefs.SetInt("MusicTrackID", 0);
         }
         else
         {
             loop.Play();
             loop2.Stop();
+            PlayerPrefs.SetInt("MusicTrackID", 1);
         }
     }
 }
