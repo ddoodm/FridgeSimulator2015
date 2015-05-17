@@ -53,6 +53,7 @@
      <Compile Include="Assets\OnTriggerActivate.cs" />
      <Compile Include="Assets\OnTriggerEndGame.cs" />
      <Compile Include="Assets\RenderLater.cs" />
+     <Compile Include="Assets\SettingsLoader.cs" />
      <Compile Include="Assets\SliderText.cs" />
      <Compile Include="Assets\SlowOnContact.cs" />
      <Compile Include="Assets\scripts\AudioManager.cs" />

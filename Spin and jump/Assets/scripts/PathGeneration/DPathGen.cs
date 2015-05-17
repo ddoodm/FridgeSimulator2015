@@ -262,7 +262,7 @@ public class DPathGen : MonoBehaviour
 				else 
 					return newPathFrom_PathLR();
 			case 3: 
-				int rando = (int)Random.Range(0.0f, 1.0f);
+				int rando = (int)(Random.Range(0.0f, 1.9999f));
 				if (difficulty >= 22.0f && rando == 0) 
 					return PathType.WALL;
 				else if (difficulty >= 22.0f && rando == 1) 

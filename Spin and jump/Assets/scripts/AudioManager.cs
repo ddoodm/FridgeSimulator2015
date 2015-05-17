@@ -38,7 +38,7 @@ public class AudioManager : MonoBehaviour {
 			stepSlow.Stop();
 		}
 
-		if (((!wasOnPlatform && player.onPlatform) || (wasInAir && !player.isInAir)) && !land.isPlaying)
+		if (((!wasOnPlatform && player.onPlatform && wasInAir && !player.isInAir) || (wasInAir && !player.isInAir)) && !land.isPlaying)
 			land.Play();
 
 		if (wasInAir && !player.isInAir && !player.isSlowed) {

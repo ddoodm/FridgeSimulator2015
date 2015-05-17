@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -8,6 +9,16 @@ public class MainMenuController : MonoBehaviour
 
 	public float difficulty = 0.0f;
 	public float speedDifficulty = 5.0f;
+
+    public Slider scroll_difficulty;
+    public Slider scroll_speed;
+
+    void Start()
+    {
+        // Load saved states for scrollbars
+        scroll_difficulty.value = PlayerPrefs.GetFloat("difficulty");
+        scroll_speed.value = PlayerPrefs.GetFloat("SpeedDifficulty");
+    }
 
     public void onClick_Start()
     {
