@@ -105,7 +105,10 @@ public class PlayerController : MonoBehaviour
         rigidbody.AddForce(Vector3.down * gravityForce);
 
         if (!wasInAir && isInAir)
-            rigidbody.AddForce(transform.forward*20.0f, ForceMode.VelocityChange);
+        {
+            rigidbody.freezeRotation = false;
+            rigidbody.AddForce(transform.forward * 20.0f, ForceMode.VelocityChange);
+        }
 
         // Add jump force
         if (Input.GetButton("Jump") && !isInAir && !gameController.paused)
