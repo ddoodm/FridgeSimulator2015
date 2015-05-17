@@ -16,7 +16,7 @@ public class CamShaker : MonoBehaviour
         if (intensity <= 0.0f)
             return;
 
-        transform.position += Random.insideUnitSphere * intensity;
+        transform.position += Random.onUnitSphere * intensity;
 
         intensity -= decay;
     }

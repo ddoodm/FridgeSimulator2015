@@ -53,7 +53,7 @@ public class CameraController : MonoBehaviour
     public void toggleCinematicCam(bool cinematic)
     {
         if (cinematic)
-            butter = 0.85f;
+            butter = 0.6f;
         else
             butter = tempButter;
 
