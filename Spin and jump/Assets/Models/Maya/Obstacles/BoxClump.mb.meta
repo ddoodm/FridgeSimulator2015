@@ -20,6 +20,7 @@ ModelImporter:
     100028: pPipe8
     100030: Obstacle_BlockMess
     100032: Platform_S_Path
+    100034: pPlane2
     400000: //RootNode
     400002: pCube1
     400004: pCube2
@@ -37,6 +38,7 @@ ModelImporter:
     400028: pPipe8
     400030: Obstacle_BlockMess
     400032: Platform_S_Path
+    400034: pPlane2
     2300000: pCube1
     2300002: pCube2
     2300004: pCube3
@@ -52,6 +54,7 @@ ModelImporter:
     2300024: pPipe7
     2300026: pPipe8
     2300028: Platform_S_Path
+    2300030: pPlane2
     3300000: pCube1
     3300002: pCube2
     3300004: pCube3
@@ -67,6 +70,7 @@ ModelImporter:
     3300024: pPipe7
     3300026: pPipe8
     3300028: Platform_S_Path
+    3300030: pPlane2
     4300000: pCube1
     4300002: pCube2
     4300004: pCube3
@@ -82,6 +86,7 @@ ModelImporter:
     4300024: pPipe7
     4300026: pPipe8
     4300028: Platform_S_Path
+    4300030: pPlane2
     9500000: //RootNode
   materials:
     importMaterials: 1

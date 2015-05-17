@@ -29,6 +29,9 @@ public class PathTile
     {
         get
         {
+            if (gameObject == null)
+                Debug.Log("PathTile.size: No game object! Type: " + type.ToString());
+
             BoxCollider collider = gameObject.GetComponent<BoxCollider>();
             return collider.size;
         }
