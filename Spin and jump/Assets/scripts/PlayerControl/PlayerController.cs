@@ -104,6 +104,9 @@ public class PlayerController : MonoBehaviour
         // Add gravity force
         rigidbody.AddForce(Vector3.down * gravityForce);
 
+        if (!wasInAir && isInAir)
+            rigidbody.AddForce(transform.forward*20.0f, ForceMode.VelocityChange);
+
         // Add jump force
         if (Input.GetButton("Jump") && !isInAir && !gameController.paused)
         {
@@ -136,6 +139,8 @@ public class PlayerController : MonoBehaviour
 
 		if (stickyJumping && isInAir)
 			handleStickyJump_Late();
+
+        wasInAir = isInAir;
     }
 
     /// <summary>
@@ -146,6 +151,9 @@ public class PlayerController : MonoBehaviour
         // Playtesters wanted free points for jumping obstacles
         if (objectUnderPlayer != null && objectUnderPlayer.tag == "Obstacle")
             gameController.AddScore(25.0f);
+
+        if (objectUnderPlayer == null)
+            isInAir = true;
 
         // Shake
         if (wasInAir && !isInAir)
@@ -167,8 +175,6 @@ public class PlayerController : MonoBehaviour
         if (moveSpeed > 0)
             tempSpeed = moveSpeed;
         moveSpeed = gameController.paused ? 0.0f : tempSpeed;
-
-        wasInAir = isInAir;
 	}
 	
     private void handleWallJump_Late()
@@ -338,10 +344,16 @@ public class PlayerController : MonoBehaviour
                 // No hit on middle ray, try again:
                 Ray rl = new Ray(transform.position - transform.right * 0.5f, Vector3.down);
                 Ray rr = new Ray(transform.position + transform.right * 0.5f, Vector3.down);
+                Ray rf = new Ray(transform.position + transform.forward * 0.5f, Vector3.down);
+                Ray rb = new Ray(transform.position - transform.forward * 0.5f, Vector3.down);
 
                 if (Physics.Raycast(rl, out hit))
                     return hit.collider.gameObject;
                 if (Physics.Raycast(rr, out hit))
+                    return hit.collider.gameObject;
+                if (Physics.Raycast(rf, out hit))
+                    return hit.collider.gameObject;
+                if (Physics.Raycast(rb, out hit))
                     return hit.collider.gameObject;
 
                 return null;
