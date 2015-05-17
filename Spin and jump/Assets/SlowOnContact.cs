@@ -5,6 +5,7 @@ public class SlowOnContact : MonoBehaviour {
 
 	private GameController gameController;
 	private PlayerController playerController;
+    private CamShaker camera;
 
     public float slowValue = 0;
 
@@ -12,7 +13,7 @@ public class SlowOnContact : MonoBehaviour {
     {
 		gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
 		playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-
+        camera = GameObject.FindWithTag("MainCamera").GetComponent<CamShaker>();
 	}
 
     void OnCollisionEnter(Collision col)
@@ -22,7 +23,8 @@ public class SlowOnContact : MonoBehaviour {
 			float scoreRemove = playerController.moveSpeed * 10;
 			gameController.RemoveScore(50.0f);
 
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            camera.shake();
         }
     }
 }

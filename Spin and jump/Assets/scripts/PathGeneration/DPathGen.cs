@@ -481,7 +481,7 @@ public class DPathGen : MonoBehaviour
         }
 
         // Increase path difficulty
-        difficulty += difficultyDelta;
+        //difficulty += difficultyDelta;
 
         // Make the tile most recent
         tiles.Push(prefab);
