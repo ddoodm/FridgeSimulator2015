@@ -16,6 +16,8 @@ public class PathTile
     public GameObject instance;
     public PathType type;
     public Vector3 startWorldPos;
+    public Vector3 startDirection;
+    public float startDifficulty;
 
     public PathTile(GameObject gameObject, PathType type)
     {
@@ -73,7 +75,7 @@ public class DPathGen : MonoBehaviour
     /// The direction in which the path is currently travelling
     /// </summary>
     private Vector3 direction = Vector3.forward;
-    private Vector3 tileIdx = Vector3.zero;
+    //private Vector3 tileIdx = Vector3.zero;
     private Vector3 worldPos = Vector3.zero;
 
     private Stack<PathTile> tiles;
@@ -82,7 +84,11 @@ public class DPathGen : MonoBehaviour
     public int maxBoringPaths = 3;
     private int boringPathCount = 0;
 
+    public BoxCollider bounds;
+
     private PlayerController player;
+
+    private int destroyAttempts = 0;
 
     public void Start()
     {
@@ -98,9 +104,8 @@ public class DPathGen : MonoBehaviour
             spawnType(PathType.PATH_S_NOOBS);
     }
 
-    public void Update()
+    public void LateUpdate()
 	{
-		Debug.Log ("Difficulty: " + difficulty);
         int genCount = maxPerFrame;
         bool collision = false;
 
@@ -113,13 +118,19 @@ public class DPathGen : MonoBehaviour
         while (
             (player.transform.position - worldPos).magnitude < spawnDistance
             && genCount-- > 0
-            && !collision)
+            /*&& !collision*/)
         {
             collision = !fsmPathGen();
 
-            //if (collision)
-                //removeLastTile(); < This does not work yet
+            if (collision)
+            {
+                removeLastTile();
+                removeLastTile();
+                destroyAttempts++;
+            }
         }
+
+        Debug.DrawLine(worldPos, worldPos + Vector3.forward * 4.0f);
     }
 
     private bool fsmPathGen()
@@ -212,15 +223,11 @@ public class DPathGen : MonoBehaviour
 					return PathType.PATH_R; 
 				else 
 					return PathType.PATH_S_NOOBS;
-				
-
 			default: 
 				if (difficulty >= 5) 
 					return PathType.PATH_S;
 				else 
 					return PathType.PATH_S_NOOBS;
-
-
         }
     }
 
@@ -231,8 +238,6 @@ public class DPathGen : MonoBehaviour
         int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
         switch (rand)
         {
-
-
 		case 0:
 			if (boringPathCount > maxBoringPaths)
 				return newPathFrom_Gap(); // Try again
@@ -260,9 +265,6 @@ public class DPathGen : MonoBehaviour
 				return PathType.PATH_S;
 			else 
 				return PathType.PATH_S_NOOBS;
-
-
-
         }
     }
 
@@ -383,8 +385,14 @@ public class DPathGen : MonoBehaviour
     /// <param name="prefab">The path tile to spawn</param>
     /// <param name="newDirection">The angle that the new tile should face (-90', 90')</param>
     /// <returns>False if the spawn would result in an intersection with an existing tile, and therefore, was not created.</returns>
-    private bool spawn(PathTile prefab, float newDirection)
+    private bool spawn(PathTile _prefab, float newDirection)
     {
+        PathTile prefab = new PathTile(_prefab.gameObject, _prefab.type);
+
+        prefab.startWorldPos = worldPos;
+        prefab.startDirection = direction;
+        prefab.startDifficulty = difficulty;
+
         // Check whether instantiation would result in a collision with another path
         if (willCollide(prefab, newDirection))
             return false;
@@ -398,17 +406,11 @@ public class DPathGen : MonoBehaviour
         if (prefab.type == PathType.SPINNER)
             giveSpinnerDirection(instance, newDirection);
 
-        // Make the tile most recent
-        tiles.Push(prefab);
-        tileIdx += direction;
-
-        prefab.startWorldPos = worldPos;
-
         // Update the world position
         switch(prefab.type)
         {
             // Straight paths add only the direction in which they travel
-		case PathType.PATH_S: case PathType.PATH_S_NOOBS: case PathType.GAP: case PathType.WALL: case PathType.STICKY:
+		    case PathType.PATH_S: case PathType.PATH_S_NOOBS: case PathType.GAP: case PathType.WALL: case PathType.STICKY:
                 worldPos += prefab.size.z * prefab.scale.z * direction;
                 break;
 
@@ -422,6 +424,8 @@ public class DPathGen : MonoBehaviour
         // Increase path difficulty
         difficulty += difficultyDelta;
 
+        // Make the tile most recent
+        tiles.Push(prefab);
 
         return true;
     }
@@ -437,6 +441,12 @@ public class DPathGen : MonoBehaviour
         Vector3 ro = worldPos;
         Vector3 rd = direction;
         float rayLength = Vector3.Scale(prefab.size, rd).magnitude * 2.5f;
+
+        // Check whether we're inside the bounds
+        Vector3 boundCheckPos = worldPos + direction * rayLength;
+        boundCheckPos.y = bounds.transform.position.y;
+        if (!bounds.bounds.Contains(boundCheckPos))
+            return true;
 
         // Vector orthonormal to the direction and up vectors (right vector)
         Vector3 right = Vector3.Cross(direction, Vector3.up);
@@ -454,7 +464,7 @@ public class DPathGen : MonoBehaviour
 
             // TODO: Bad constant, but that is the length of an S + an L
             RaycastHit? sideHit;
-            if ((sideHit = threeRayCollision(ro + direction * prefab.size.z, newDirection, right, 15.0f)).HasValue)
+            if ((sideHit = threeRayCollision(ro + direction * prefab.size.z, newDirection, right, 16.0f)).HasValue)
                 return willCollideAfterPanic(sideHit.Value);
         }
 
@@ -530,13 +540,22 @@ public class DPathGen : MonoBehaviour
         direction = Quaternion.AngleAxis(angle, Vector3.up) * direction;
     }
 
-    /*
     private void removeLastTile()
     {
-        PathTile last = tiles.Peek();
-        Destroy(last.instance);
+        if (tiles.Count <= 1)
+            return;
+
+        if (player.objectUnderPlayer == tiles.Peek().instance)
+            return;
+
+        PathTile last = tiles.Pop();
 
         worldPos = last.startWorldPos;
+        lastType = last.type;
+        direction = last.startDirection;
+        difficulty = last.startDifficulty;
+
+        DontDestroyOnLoad(last.instance);
+        DestroyImmediate(last.instance);
     }
-     */
 }
