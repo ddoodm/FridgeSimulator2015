@@ -20,7 +20,7 @@ public class SlowOnContact : MonoBehaviour {
         if (col.gameObject.tag == "Player")
         {
 			float scoreRemove = playerController.moveSpeed * 10;
-			gameController.RemoveScore(50);
+			gameController.RemoveScore(50.0f);
 
             Destroy(gameObject);
         }

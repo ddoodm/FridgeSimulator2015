@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
 	{
         // Playtesters wanted free points for jumping obstacles
         if (objectUnderPlayer != null && objectUnderPlayer.tag == "Obstacle")
-            gameController.AddScore(2.0f);
+            gameController.AddScore(25.0f);
 
         // Shake
         if (wasInAir && !isInAir)

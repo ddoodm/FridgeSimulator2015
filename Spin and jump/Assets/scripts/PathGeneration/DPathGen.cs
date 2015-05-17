@@ -7,7 +7,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum PathType { PATH_S, PATH_L, PATH_R, SPINNER, WALL, GAP, PATH_S_NOOBS, STICKY };
+public enum PathType { PATH_S_OBSTACLE, PATH_L, PATH_R, SPINNER, WALL, WALL_R, GAP, PATH_S_NOOBS, STICKY };
 
 [System.Serializable]
 public class PathTile
@@ -55,6 +55,7 @@ public class DPathGen : MonoBehaviour
         prefab_spinner,
         prefab_gap,
         prefab_wall,
+		prefab_wall_r,
 		prefab_sticky,
         prefab_path_s_noobs;
 
@@ -68,8 +69,8 @@ public class DPathGen : MonoBehaviour
     /// </summary>
     public int maxPerFrame = 3;
 
-    public float difficulty = 0;
-    public float difficultyDelta = 0.05f;
+	// Local Difficulty Variables
+    private float difficulty = 0;
 
     /// <summary>
     /// The direction in which the path is currently travelling
@@ -79,21 +80,29 @@ public class DPathGen : MonoBehaviour
     private Vector3 worldPos = Vector3.zero;
 
     private Stack<PathTile> tiles;
-    PathType lastType = PathType.PATH_S;
+    PathType lastType = PathType.PATH_S_OBSTACLE;
 
     public int maxBoringPaths = 3;
+	public int noWallStart = 0;
     private int boringPathCount = 0;
+	private bool noSpawnTurn = false;
 
     public BoxCollider bounds;
 
     private PlayerController player;
+	private GameController gameController;
 
     private int destroyAttempts = 0;
 
     public void Start()
     {
         tiles = new Stack<PathTile>();
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+		player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+		gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
+
+		// Get Difficulty variable from GameController
+		this.difficulty = gameController.getDifficulty ();
+
 
         // The first tile will spawn as if there was an imaginary 'S' path behind it
         tiles.Push(prefab_path_s);
@@ -108,6 +117,15 @@ public class DPathGen : MonoBehaviour
 	{
         int genCount = maxPerFrame;
         bool collision = false;
+
+
+		// Get difficulty from GameController
+		this.difficulty = gameController.getDifficulty ();
+		//Debug.Log ("Difficulty: " + difficulty);
+
+		if (difficulty >= 30) {
+			noWallStart = 0;
+		}
 
         /*
          * New tiles are spawned each frame, so long as the following conditions are met:
@@ -135,11 +153,11 @@ public class DPathGen : MonoBehaviour
 
     private bool fsmPathGen()
     {
-        PathType nextType = PathType.PATH_S;
+        PathType nextType = PathType.PATH_S_OBSTACLE;
 
-        switch (lastType = tiles.Peek().type)
-        {
-            case PathType.PATH_S:
+		switch (lastType = tiles.Peek().type)
+		{
+            case PathType.PATH_S_OBSTACLE:
             case PathType.PATH_S_NOOBS: 
 				nextType = newPathFrom_PathS(); 
 				break;
@@ -156,6 +174,9 @@ public class DPathGen : MonoBehaviour
             case PathType.WALL: 
 				nextType = newPathFrom_Wall(); 
 				break;
+			case PathType.WALL_R: 
+				nextType = newPathFrom_Wall(); 
+				break;
 			case PathType.STICKY: 
 				nextType = newPathFrom_Sticky(); 
 				break;
@@ -163,69 +184,121 @@ public class DPathGen : MonoBehaviour
 
         lastType = nextType;
 
-        return spawnType(nextType);
+		if (nextType == PathType.PATH_L || nextType == PathType.PATH_R || nextType == PathType.SPINNER)
+			noSpawnTurn = true;
+		else if (nextType == PathType.PATH_S_OBSTACLE || nextType == PathType.PATH_S_NOOBS || nextType == PathType.WALL || nextType == PathType.WALL_R)
+			noSpawnTurn = false;
+
+		return spawnType(nextType);
     }
 
     private PathType newPathFrom_PathS()
     {
         const int options = 7;
 
-        int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
+		int rand = (int)Random.Range(0.0f, (float)options);
         switch(rand)
         {
+
+			// Spinners and Walls spawned after start chunp spawned
             case 0:
-                if (boringPathCount > maxBoringPaths)
+				if (boringPathCount > maxBoringPaths || difficulty >= 35.0f)
                     return newPathFrom_PathS(); // Try again
-                return PathType.PATH_S;
-            case 1: return PathType.PATH_L;
-            case 2: return PathType.PATH_R;
-            case 3: if (difficulty >= 1) return PathType.GAP; else return newPathFrom_PathS();
-            case 4: if (difficulty >= 2) return PathType.SPINNER; else return newPathFrom_PathS();
-            case 5: if (difficulty >= 3) return PathType.WALL; else return newPathFrom_PathS();
+                return PathType.PATH_S_OBSTACLE;
+            case 1: 
+				return PathType.PATH_L;
+            case 2: 
+				return PathType.PATH_R;
+            case 3: 
+				return PathType.GAP;
+            case 4: 
+				if (noWallStart >= 0) 
+					return PathType.SPINNER; 
+				else 
+					return newPathFrom_PathS();
+            case 5: 
+				if (noWallStart >= 0) 
+					return PathType.WALL; 
+				else 
+					return newPathFrom_PathS();
+			case 6:
+				if (difficulty >= 5.0f) 
+					return PathType.WALL_R;
+				else 
+					return newPathFrom_PathS();
 			//case 6: return PathType.STICKY;
-            default: return PathType.PATH_S;
+			default: 
+				if (boringPathCount > maxBoringPaths)
+					return newPathFrom_PathS();
+				else if (difficulty >= 25.0f) 
+					if (difficulty >= 35.0f) 
+						return newPathFrom_PathS(); // So more s_paths
+					else
+						return PathType.PATH_S_OBSTACLE;
+				else 
+					return PathType.PATH_S_NOOBS;
         }
     }
 
     private PathType newPathFrom_PathLR()
     {
-        const int options = 3;
+		const int options = 6;
 
-        int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
+		int rand = (int)Random.Range(0.0f, (float)options);
         switch (rand)
         {
-            case 0: if (difficulty < 0.5) return PathType.PATH_S_NOOBS; else return PathType.PATH_S;
-            //case 1: if (difficulty >= 10) return PathType.GAP; else return newPathFrom_PathLR();
-            //case 2: if (difficulty >= 14) return PathType.SPINNER; else return newPathFrom_PathLR();
-            default: return PathType.PATH_S;
+            case 0: 
+				return PathType.PATH_S_OBSTACLE;
+            case 1: 
+				if (difficulty >= 14.0f) 
+					return PathType.GAP; 
+				else 
+					return newPathFrom_PathLR();
+            case 2: 
+				if (difficulty >= 8.0f && noSpawnTurn == false) 
+					return PathType.SPINNER; 
+				else 
+					return newPathFrom_PathLR();
+			case 3: 
+				if (difficulty >= 22.0f) 
+					return PathType.WALL; 
+				else 
+					return newPathFrom_PathLR();
+			case 4:
+				if (difficulty >= 22.0f) 
+					return PathType.WALL_R;
+				else 
+					return newPathFrom_PathLR();
+			default: 
+				if (difficulty >= 8.0f) 
+					return PathType.PATH_S_OBSTACLE;
+				else 
+					return PathType.PATH_S_NOOBS;
         }
     }
 
     private PathType newPathFrom_Spinner()
     {
-        const int options = 3;
+        const int options = 4;
 
-        int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
+		int rand = (int)Random.Range(0.0f, (float)options);
         switch (rand)
         {
 			case 0:
-				if (difficulty >= 25) 
-					return PathType.PATH_S; 
-				else 
-					return PathType.PATH_S_NOOBS;
+				return PathType.PATH_S_OBSTACLE;
 			case 1:
-				if (difficulty >= 20) 
+				if (difficulty >= 12.0f && noSpawnTurn == false) 
 					return PathType.PATH_L; 
 				else 
-					return PathType.PATH_S_NOOBS;
+					return newPathFrom_Spinner();
 			case 2:
-				if (difficulty >= 20) 
+				if (difficulty >= 12.0f && noSpawnTurn == false) 
 					return PathType.PATH_R; 
 				else 
-					return PathType.PATH_S_NOOBS;
+					return newPathFrom_Spinner();
 			default: 
-				if (difficulty >= 5) 
-					return PathType.PATH_S;
+				if (difficulty >= 10.0f) 
+					return PathType.PATH_S_OBSTACLE;
 				else 
 					return PathType.PATH_S_NOOBS;
         }
@@ -235,34 +308,26 @@ public class DPathGen : MonoBehaviour
     {
         const int options = 4;
 
-        int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
+		int rand = (int)Random.Range(0.0f, (float)options);
         switch (rand)
         {
 		case 0:
 			if (boringPathCount > maxBoringPaths)
 				return newPathFrom_Gap(); // Try again
-			if (difficulty >= 10) 
-				return PathType.PATH_S; 
-			else 
-				return PathType.PATH_S_NOOBS;
-		case 1: 
-			if (difficulty >= 30) 
-				return PathType.PATH_S; 
-			else 
-				return PathType.PATH_S_NOOBS;
-		case 2:
-			if (difficulty >= 15)
+			return PathType.PATH_S_OBSTACLE; 
+		case 1:
+			if (difficulty >= 8.0f && noSpawnTurn == false)
 				return PathType.PATH_L; 
 			else
-				return PathType.PATH_S_NOOBS;
-		case 3:
-			if (difficulty >= 15)
+				return newPathFrom_Gap();
+		case 2:
+			if (difficulty >= 8.0f && noSpawnTurn == false)
 				return PathType.PATH_R; 
 			else
-				return PathType.PATH_S_NOOBS;
+				return newPathFrom_Gap();
 		default: 
-			if (difficulty >= 5) 
-				return PathType.PATH_S;
+			if (difficulty >= 16.0f) 
+				return PathType.PATH_S_OBSTACLE;
 			else 
 				return PathType.PATH_S_NOOBS;
         }
@@ -270,36 +335,29 @@ public class DPathGen : MonoBehaviour
 
     private PathType newPathFrom_Wall()
 	{
-		const int options = 4;
+		const int options = 5;
 		
-		int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
+		int rand = (int)Random.Range(0.0f, (float)options);
 		switch (rand)
-		{
-			case 0:
-				if (boringPathCount > maxBoringPaths)
-					return newPathFrom_Gap(); // Try again
-				if (difficulty >= 15) 
-					return PathType.PATH_S; 
-				else 
-					return PathType.PATH_S_NOOBS;
+		{ 
 			case 1: 
-				if (difficulty >= 20) 
-					return PathType.PATH_S; 
+				if (difficulty >= 4.0f) 
+					return PathType.PATH_S_OBSTACLE; 
 				else 
 					return PathType.PATH_S_NOOBS;
 			case 2:
-				if (difficulty >= 15)
+				if (difficulty >= 18.0f)
 					return PathType.PATH_L; 
 				else
 					return PathType.PATH_S_NOOBS;
 			case 3:
-				if (difficulty >= 15)
+				if (difficulty >= 18.0f)
 					return PathType.PATH_R; 
 				else
 					return PathType.PATH_S_NOOBS;
 			default: 
-				if (difficulty >= 5) 
-					return PathType.PATH_S;
+				if (difficulty >= 22.0f) 
+					return PathType.PATH_S_OBSTACLE;
 				else 
 					return PathType.PATH_S_NOOBS;
 		}
@@ -307,36 +365,29 @@ public class DPathGen : MonoBehaviour
 
 	private PathType newPathFrom_Sticky()
 	{
-		const int options = 4;
+		const int options = 5;
 		
-		int rand = (int)(Random.value * (float)(options) - Mathf.Epsilon);
+		int rand = (int)Random.Range(0.0f, (float)options);
 		switch (rand)
-		{
-		case 0:
-			if (boringPathCount > maxBoringPaths)
-				return newPathFrom_Gap(); // Try again
-			if (difficulty >= 25) 
-				return PathType.PATH_S; 
-			else 
-				return PathType.PATH_S_NOOBS;
+		{ 
 		case 1: 
-			if (difficulty >= 35) 
-				return PathType.PATH_S; 
+			if (difficulty >= 4.0f) 
+				return PathType.PATH_S_OBSTACLE; 
 			else 
 				return PathType.PATH_S_NOOBS;
 		case 2:
-			if (difficulty >= 20)
+			if (difficulty >= 20.0f)
 				return PathType.PATH_L; 
 			else
 				return PathType.PATH_S_NOOBS;
 		case 3:
-			if (difficulty >= 20)
+			if (difficulty >= 20.0f)
 				return PathType.PATH_R; 
 			else
 				return PathType.PATH_S_NOOBS;
 		default: 
-			if (difficulty >= 25) 
-				return PathType.PATH_S;
+			if (difficulty >= 25.0f) 
+				return PathType.PATH_S_OBSTACLE;
 			else 
 				return PathType.PATH_S_NOOBS;
 		}
@@ -344,14 +395,19 @@ public class DPathGen : MonoBehaviour
 
     private bool spawnType(PathType type)
     {
+		if (noWallStart < 25)
+			noWallStart++;
+
         switch(type)
         {
-            case PathType.PATH_S:
+            case PathType.PATH_S_OBSTACLE:
                 boringPathCount++;
                 return spawn(prefab_path_s, 0.0f);
             case PathType.PATH_L:
+				boringPathCount = 1;
                 return spawn(prefab_path_l, -90.0f);
             case PathType.PATH_R:
+				boringPathCount = 1;
                 return spawn(prefab_path_r, 90.0f);
             case PathType.SPINNER:
                 int attempts = 3;
@@ -368,6 +424,9 @@ public class DPathGen : MonoBehaviour
             case PathType.WALL:
                 boringPathCount = 0;
                 return spawn(prefab_wall, 0.0f);
+			case PathType.WALL_R:
+				boringPathCount = 0;
+				return spawn(prefab_wall_r, 0.0f);
 			case PathType.STICKY:
 				boringPathCount = 0;
 				return spawn (prefab_sticky, 0.0f);
@@ -410,7 +469,7 @@ public class DPathGen : MonoBehaviour
         switch(prefab.type)
         {
             // Straight paths add only the direction in which they travel
-		    case PathType.PATH_S: case PathType.PATH_S_NOOBS: case PathType.GAP: case PathType.WALL: case PathType.STICKY:
+            case PathType.PATH_S_OBSTACLE: case PathType.PATH_S_NOOBS: case PathType.GAP: case PathType.WALL: case PathType.WALL_R: case PathType.STICKY:
                 worldPos += prefab.size.z * prefab.scale.z * direction;
                 break;
 
