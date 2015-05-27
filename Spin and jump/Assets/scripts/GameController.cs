@@ -44,7 +44,7 @@ public class GameController : MonoBehaviour
     {
 		difficulty = PlayerPrefs.GetFloat ("difficulty");
 
-		speedDifficulty = PlayerPrefs.GetFloat ("SpeedDifficulty");
+		speedDifficulty = PlayerPrefs.GetFloat ("SpeedDifficulty", 5.0f);
 
 		player.moveSpeed = speedDifficulty;
 

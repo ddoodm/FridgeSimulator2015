@@ -13,7 +13,7 @@ public class AudioManager : MonoBehaviour {
 		gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
 
         // Play music
-        switch(PlayerPrefs.GetInt("MusicTrackID"))
+        switch(PlayerPrefs.GetInt("MusicTrackID", 0))
         {
             case 0: loop.Play(); break;
             case 1: loop2.Play(); break;
