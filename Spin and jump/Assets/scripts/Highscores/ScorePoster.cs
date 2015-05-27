@@ -65,7 +65,6 @@ public class ScorePoster : MonoBehaviour
 		form.AddField("time", 1337);
 		*/
 
-
         // Post to the PHP script on the server, which interfaces with SQL
         WWW www = new WWW(serverURI, form);
         yield return www;

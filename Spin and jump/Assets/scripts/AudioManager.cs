@@ -15,8 +15,8 @@ public class AudioManager : MonoBehaviour {
         // Play music
         switch(PlayerPrefs.GetInt("MusicTrackID"))
         {
-            case 0: loop2.Play(); break;
-            case 1: loop.Play(); break;
+            case 0: loop.Play(); break;
+            case 1: loop2.Play(); break;
         }
 	}
 
@@ -63,13 +63,13 @@ public class AudioManager : MonoBehaviour {
         {
             loop.Stop();
             loop2.Play();
-            PlayerPrefs.SetInt("MusicTrackID", 0);
+            PlayerPrefs.SetInt("MusicTrackID", 1);
         }
         else
         {
             loop.Play();
             loop2.Stop();
-            PlayerPrefs.SetInt("MusicTrackID", 1);
+            PlayerPrefs.SetInt("MusicTrackID", 0);
         }
     }
 }
