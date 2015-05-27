@@ -1,10 +1,6 @@
 Base path: C:/Program Files (x86)/Unity/Editor/Data
-Pipe name: \\.\pipe\UnityShaderCompiler-2-38124
+Pipe name: \\.\pipe\UnityShaderCompiler-2-40840
 Cmd: getPlatforms
-Cmd: compileSnippet
-  error: 2 plat 1 at (0): Arithmetic instruction limit of 64 exceeded; 87 arithmetic instructions needed to compile program
-  error: 1 plat 1 at (54): implicit cast from "float4" to "float"
-  api=1 type=1 insize=1299 outsize=0 kw= ok=0
 Cmd: compileSnippet
   error: 2 plat 1 at (0): Arithmetic instruction limit of 64 exceeded; 87 arithmetic instructions needed to compile program
   error: 1 plat 1 at (54): implicit cast from "float4" to "float"

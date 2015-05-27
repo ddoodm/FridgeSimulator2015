@@ -31,12 +31,18 @@ public class MainMenuController : MonoBehaviour
 
     public void onClick_Quit()
     {
+        PlayerPrefs.SetFloat("difficulty", difficulty);
+        PlayerPrefs.SetFloat("SpeedDifficulty", speedDifficulty);
+
         buttonPress.Play();
         Application.Quit();
     }
 
     public void onClick_Tutorial()
     {
+        PlayerPrefs.SetFloat("difficulty", difficulty);
+        PlayerPrefs.SetFloat("SpeedDifficulty", speedDifficulty);
+
         buttonPress.Play();
         Application.LoadLevel(2);
     }
@@ -50,6 +56,4 @@ public class MainMenuController : MonoBehaviour
 	{
 		speedDifficulty = sliderSpeedDifficulty;
 	}
-
-
 }
